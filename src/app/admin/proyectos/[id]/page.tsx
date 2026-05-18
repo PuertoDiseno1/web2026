@@ -23,6 +23,7 @@ export default async function EditarProyecto({ params }: { params: Promise<{ id:
           ...project,
           videoEmbed: project.videoEmbed ?? "",
           coverImage: project.coverImage ?? "",
+          coverVideo: project.coverVideo ?? undefined,
         }}
       />
     </>
