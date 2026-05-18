@@ -14,7 +14,7 @@ export default async function EditarPost({ params }: { params: Promise<{ id: str
         <Link href="/admin/blog" style={{ fontSize: "0.8rem", color: "#666" }}>← Blog</Link>
         <h1 style={{ fontSize: "1.5rem", fontWeight: 700 }}>Editar nota</h1>
       </div>
-      <PostForm post={{ ...post, excerpt: post.excerpt ?? "" }} />
+      <PostForm post={{ ...post, excerpt: post.excerpt ?? "", coverImage: post.coverImage ?? undefined }} />
     </>
   );
 }
