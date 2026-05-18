@@ -1,32 +1,34 @@
 "use client";
 import { useState } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const res = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
+    try {
+      const res = await signIn("credentials", {
+        email,
+        password,
+        redirect: false,
+      });
 
-    if (res?.error) {
-      setError("Email o contraseña incorrectos.");
+      if (!res?.ok || res?.error) {
+        setError("Email o contraseña incorrectos.");
+        setLoading(false);
+      } else {
+        window.location.href = "/admin";
+      }
+    } catch {
+      setError("Error al conectar con el servidor.");
       setLoading(false);
-    } else {
-      router.push("/admin");
-      router.refresh();
     }
   }
 
