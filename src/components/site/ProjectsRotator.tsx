@@ -165,17 +165,14 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
           transition: letter-spacing 0.35s ease;
         }
         .mosaic-cell:hover .mosaic-cat { opacity: 1 !important; transform: translateY(0) !important; }
-        /* Mobile: 1 sola columna, alturas fijas más pequeñas */
+        /* Mobile: mantener 3 columnas, reducir alturas */
         @media (max-width: 640px) {
-          .mosaic-col { flex: none !important; width: 100% !important; }
-          .mosaic-col-1, .mosaic-col-2 { display: none !important; }
-          .mosaic-cell { height: 220px !important; }
+          .mosaic-cell { height: 130px !important; }
+          .mosaic-title { font-size: 0.62rem !important; }
+          .mosaic-cat { display: none; }
         }
-        /* Tablet: 2 columnas */
         @media (min-width: 641px) and (max-width: 900px) {
-          .mosaic-col-2 { display: none !important; }
-          .mosaic-col { flex: 1 !important; }
-          .mosaic-cell { height: 200px !important; }
+          .mosaic-cell { height: 180px !important; }
         }
       `}</style>
 
