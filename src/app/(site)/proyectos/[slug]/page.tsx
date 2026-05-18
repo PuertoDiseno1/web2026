@@ -79,19 +79,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           <div>
             <h1
               style={{
-                fontSize: "clamp(1.8rem, 3vw, 2.8rem)",
+                fontSize: "clamp(2.4rem, 4.5vw, 5rem)",
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
-                lineHeight: 1.1,
+                lineHeight: 1.05,
                 color: "#111",
-                marginBottom: "1.5rem",
+                marginBottom: "1.75rem",
               }}
             >
               {project.title}
             </h1>
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
               {services.map((sv) => (
-                <li key={sv} style={{ fontSize: "0.95rem", color: "#1442f0", fontWeight: 500, marginBottom: "0.35rem" }}>
+                <li key={sv} style={{ fontSize: "clamp(0.9rem, 1.2vw, 1.25rem)", color: "#1442f0", fontWeight: 500, marginBottom: "0.35rem" }}>
                   {sv}
                 </li>
               ))}
@@ -103,19 +103,19 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             {project.subtitle && (
               <h2
                 style={{
-                  fontSize: "clamp(1.1rem, 2vw, 1.5rem)",
-                  fontWeight: 600,
+                  fontSize: "clamp(1.6rem, 3vw, 3.5rem)",
+                  fontWeight: 300,
                   color: "#111",
-                  letterSpacing: "-0.02em",
-                  marginBottom: "1.25rem",
-                  lineHeight: 1.3,
+                  letterSpacing: "-0.03em",
+                  marginBottom: "1.75rem",
+                  lineHeight: 1.15,
                 }}
               >
                 {project.subtitle}
               </h2>
             )}
             {project.description.split("\n\n").map((para, i) => (
-              <p key={i} style={{ fontSize: "0.95rem", color: "#444", lineHeight: 1.8, marginBottom: "1rem" }}>
+              <p key={i} style={{ fontSize: "clamp(0.95rem, 1.1vw, 1.125rem)", color: "#444", lineHeight: 1.8, marginBottom: "1.25rem" }}>
                 {para}
               </p>
             ))}
