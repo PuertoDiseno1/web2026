@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { signIn } from "next-auth/react";
+import { loginAction } from "./actions";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -14,18 +14,12 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await signIn("credentials", {
-        email,
-        password,
-        redirect: false,
-      });
-
-      if (!res?.ok || res?.error) {
-        setError("Email o contraseña incorrectos.");
+      const errorMsg = await loginAction(email, password);
+      if (errorMsg) {
+        setError(errorMsg);
         setLoading(false);
-      } else {
-        window.location.href = "/admin";
       }
+      // Si no hay error, el server action hace redirect automático a /admin
     } catch {
       setError("Error al conectar con el servidor.");
       setLoading(false);
