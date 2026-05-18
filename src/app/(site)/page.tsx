@@ -104,8 +104,7 @@ export default async function HomePage() {
               marginBottom: "4rem",
             }}
           >
-            Desarrollamos marcas sólidas a través de<br />
-            procesos rigurosos y equipos{" "}
+            Desarrollamos marcas sólidas a través de procesos rigurosos y equipos{" "}
             <mark
               style={{
                 background: "linear-gradient(150deg, transparent 9%, #c8f25a 9%)",
@@ -188,7 +187,7 @@ export default async function HomePage() {
       </section>
 
       {/* ═══ PROJECTS GRID ═══ */}
-      <section style={{ background: "#fff", padding: "0 2.5rem 4rem" }}>
+      <section className="sp" style={{ background: "#fff", padding: "0 2.5rem 4rem" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <ProjectsRotator projects={projects} />
 
