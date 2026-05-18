@@ -100,43 +100,62 @@ function AnimatedNumber({ value, suffix }: { value: string; suffix?: string }) {
 
 export default function StatsCounter({ stats }: { stats: Stat[] }) {
   return (
-    <div style={{
-      display: "grid",
-      gridTemplateColumns: "repeat(3, 1fr)",
-      gap: 0,
-    }}>
-      {stats.map((stat, i) => (
-        <div
-          key={stat.label}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            textAlign: "center",
-            padding: "2rem 2rem",
-            borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.2)" : "none",
-          }}
-        >
-          <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-          <div style={{
-            width: "2.5rem",
-            height: "1px",
-            background: "#c8f25a",
-            margin: "1rem auto",
-            opacity: 0.7,
-          }} />
-          <p style={{
-            fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)",
-            fontWeight: 300,
-            color: "rgba(255,255,255,0.8)",
-            lineHeight: 1.5,
-          }}>
-            {stat.label.split("\n").map((line, j) => (
-              <span key={j} style={{ display: "block" }}>{line}</span>
-            ))}
-          </p>
-        </div>
-      ))}
-    </div>
+    <>
+      <style>{`
+        .stats-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 0;
+        }
+        @media (max-width: 640px) {
+          .stats-grid {
+            grid-template-columns: 1fr;
+          }
+          .stats-cell {
+            border-left: none !important;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding: 2rem 1.5rem !important;
+          }
+          .stats-cell:first-child {
+            border-top: none;
+          }
+        }
+      `}</style>
+      <div className="stats-grid">
+        {stats.map((stat, i) => (
+          <div
+            key={stat.label}
+            className="stats-cell"
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              textAlign: "center",
+              padding: "2rem 2rem",
+              borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.2)" : "none",
+            }}
+          >
+            <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+            <div style={{
+              width: "2.5rem",
+              height: "1px",
+              background: "#c8f25a",
+              margin: "1rem auto",
+              opacity: 0.7,
+            }} />
+            <p style={{
+              fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)",
+              fontWeight: 300,
+              color: "rgba(255,255,255,0.8)",
+              lineHeight: 1.5,
+            }}>
+              {stat.label.split("\n").map((line, j) => (
+                <span key={j} style={{ display: "block" }}>{line}</span>
+              ))}
+            </p>
+          </div>
+        ))}
+      </div>
+    </>
   );
 }
