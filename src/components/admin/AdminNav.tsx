@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 
@@ -34,8 +35,8 @@ export default function AdminNav() {
       }}
     >
       <div style={{ marginBottom: "3rem" }}>
-        <p style={{ fontSize: "1rem", fontWeight: 700, color: "#f5f5f0", letterSpacing: "-0.02em" }}>Puerto Diseño</p>
-        <p style={{ fontSize: "0.75rem", color: "rgba(245,245,240,0.35)", marginTop: "0.25rem" }}>Admin</p>
+        <Image src="/logo-footer.png" alt="Puerto Diseño" width={130} height={56} style={{ width: "auto", height: 36, maxWidth: 130, display: "block" }} />
+        <p style={{ fontSize: "0.75rem", color: "rgba(245,245,240,0.35)", marginTop: "0.5rem" }}>Admin</p>
       </div>
 
       <nav style={{ flex: 1 }}>
