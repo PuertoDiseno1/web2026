@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 import ServiceSlider from "@/components/site/ServiceSlider";
