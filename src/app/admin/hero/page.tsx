@@ -1,3 +1,4 @@
+export const dynamic = 'force-dynamic';
 import HeroManager from "@/components/admin/HeroManager";
 import { prisma } from "@/lib/prisma";
 
