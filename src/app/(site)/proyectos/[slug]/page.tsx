@@ -5,35 +5,43 @@ import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 
 async function getProject(slug: string) {
-  return prisma.project.findUnique({ where: { slug } });
+  try {
+    return await prisma.project.findUnique({ where: { slug } });
+  } catch { return null; }
 }
 
 async function getPrevNext(order: number) {
-  const [prev, next] = await Promise.all([
-    prisma.project.findFirst({
-      where: { published: true, order: { lt: order } },
-      orderBy: { order: "desc" },
-      select: { slug: true, title: true },
-    }),
-    prisma.project.findFirst({
-      where: { published: true, order: { gt: order } },
-      orderBy: { order: "asc" },
-      select: { slug: true, title: true },
-    }),
-  ]);
-  return { prev, next };
+  try {
+    const [prev, next] = await Promise.all([
+      prisma.project.findFirst({
+        where: { published: true, order: { lt: order } },
+        orderBy: { order: "desc" },
+        select: { slug: true, title: true },
+      }),
+      prisma.project.findFirst({
+        where: { published: true, order: { gt: order } },
+        orderBy: { order: "asc" },
+        select: { slug: true, title: true },
+      }),
+    ]);
+    return { prev, next };
+  } catch { return { prev: null, next: null }; }
 }
 
 export async function generateStaticParams() {
-  const projects = await prisma.project.findMany({ select: { slug: true } });
-  return projects.map((p) => ({ slug: p.slug }));
+  try {
+    const projects = await prisma.project.findMany({ select: { slug: true } });
+    return projects.map((p) => ({ slug: p.slug }));
+  } catch { return []; }
 }
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const p = await getProject(slug);
-  if (!p) return {};
-  return { title: `${p.title} | Puerto Diseño`, description: p.subtitle };
+  try {
+    const p = await getProject(slug);
+    if (!p) return {};
+    return { title: `${p.title} | Puerto Diseño`, description: p.subtitle };
+  } catch { return {}; }
 }
 
 export default async function ProjectPage({ params }: { params: Promise<{ slug: string }> }) {

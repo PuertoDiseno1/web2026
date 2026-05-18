@@ -3,12 +3,14 @@ import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 
 async function getData() {
-  const [team, pageContent] = await Promise.all([
-    prisma.teamMember.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
-    prisma.pageContent.findUnique({ where: { page: "nosotros" } }),
-  ]);
-  const content = pageContent?.content ? JSON.parse(pageContent.content) : {};
-  return { team, content };
+  try {
+    const [team, pageContent] = await Promise.all([
+      prisma.teamMember.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
+      prisma.pageContent.findUnique({ where: { page: "nosotros" } }),
+    ]);
+    const content = pageContent?.content ? JSON.parse(pageContent.content) : {};
+    return { team, content };
+  } catch { return { team: [], content: {} }; }
 }
 
 export const metadata = {

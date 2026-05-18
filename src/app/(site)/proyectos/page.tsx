@@ -3,7 +3,9 @@ import { prisma } from "@/lib/prisma";
 import ProjectsGrid from "@/components/site/ProjectsGrid";
 
 async function getProjects() {
-  return prisma.project.findMany({ where: { published: true }, orderBy: { order: "asc" } });
+  try {
+    return await prisma.project.findMany({ where: { published: true }, orderBy: { order: "asc" } });
+  } catch { return []; }
 }
 
 export const metadata = {

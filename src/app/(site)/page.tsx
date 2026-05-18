@@ -10,19 +10,26 @@ import ProjectsRotator from "@/components/site/ProjectsRotator";
 import StatsCounter from "@/components/site/StatsCounter";
 
 async function getData() {
-  const [projects, settings] = await Promise.all([
-    prisma.project.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
-    prisma.siteSettings.findMany(),
-  ]);
-  const s = Object.fromEntries(settings.map((r) => [r.key, r.value]));
-  const featured = projects.find((p) => p.featured) ?? projects[0] ?? null;
+  try {
+    const [projects, settings] = await Promise.all([
+      prisma.project.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
+      prisma.siteSettings.findMany(),
+    ]);
+    const s = Object.fromEntries(settings.map((r) => [r.key, r.value]));
+    const featured = projects.find((p) => p.featured) ?? projects[0] ?? null;
 
-  const clientesDir = path.join(process.cwd(), "public", "clientes");
-  const logos = fs.readdirSync(clientesDir).filter((f) =>
-    /\.(png|jpg|jpeg|svg|webp)$/i.test(f)
-  );
+    const clientesDir = path.join(process.cwd(), "public", "clientes");
+    const logos = fs.readdirSync(clientesDir).filter((f) =>
+      /\.(png|jpg|jpeg|svg|webp)$/i.test(f)
+    );
 
-  return { projects, s, logos, featured };
+    return { projects, s, logos, featured };
+  } catch {
+    const clientesDir = path.join(process.cwd(), "public", "clientes");
+    let logos: string[] = [];
+    try { logos = fs.readdirSync(clientesDir).filter((f) => /\.(png|jpg|jpeg|svg|webp)$/i.test(f)); } catch {}
+    return { projects: [], s: {} as Record<string, string>, logos, featured: null };
+  }
 }
 
 function parseImages(raw: string | null | undefined): string[] {

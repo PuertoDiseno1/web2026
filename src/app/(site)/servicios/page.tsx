@@ -66,9 +66,11 @@ const defaultServices = [
 ];
 
 async function getPageContent() {
-  const record = await prisma.pageContent.findUnique({ where: { page: "servicios" } });
-  if (!record) return {};
-  try { return JSON.parse(record.content); } catch { return {}; }
+  try {
+    const record = await prisma.pageContent.findUnique({ where: { page: "servicios" } });
+    if (!record) return {};
+    try { return JSON.parse(record.content); } catch { return {}; }
+  } catch { return {}; }
 }
 
 export default async function ServiciosPage() {
