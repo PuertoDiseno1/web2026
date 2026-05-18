@@ -83,7 +83,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 fontWeight: 700,
                 letterSpacing: "-0.03em",
                 lineHeight: 1.05,
-                color: "#111",
+                color: "#1442f0",
                 marginBottom: "1.75rem",
               }}
             >
@@ -105,7 +105,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
                 style={{
                   fontSize: "clamp(1.6rem, 3vw, 3.5rem)",
                   fontWeight: 300,
-                  color: "#111",
+                  color: "#1442f0",
                   letterSpacing: "-0.03em",
                   marginBottom: "1.75rem",
                   lineHeight: 1.15,
