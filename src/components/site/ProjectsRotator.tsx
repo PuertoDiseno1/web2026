@@ -165,14 +165,16 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
           transition: letter-spacing 0.35s ease;
         }
         .mosaic-cell:hover .mosaic-cat { opacity: 1 !important; transform: translateY(0) !important; }
-        /* Mobile: mantener 3 columnas, reducir alturas */
+        /* Mobile: mantener 3 columnas con proporciones, escalar ~50% */
         @media (max-width: 640px) {
-          .mosaic-cell { height: 130px !important; }
+          .mosaic-cell-lg { height: 175px !important; }
+          .mosaic-cell-sm { height: 133px !important; }
           .mosaic-title { font-size: 0.62rem !important; }
           .mosaic-cat { display: none; }
         }
         @media (min-width: 641px) and (max-width: 900px) {
-          .mosaic-cell { height: 180px !important; }
+          .mosaic-cell-lg { height: 240px !important; }
+          .mosaic-cell-sm { height: 182px !important; }
         }
       `}</style>
 
@@ -207,7 +209,7 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
                 <Link
                   key={slotIdx}
                   href={`/proyectos/${current.slug}`}
-                  className="mosaic-cell"
+                  className={`mosaic-cell ${h >= 300 ? "mosaic-cell-lg" : "mosaic-cell-sm"}`}
                   style={{ height: h, background: bg }}
                 >
                   {/* Current layer (bottom) */}
