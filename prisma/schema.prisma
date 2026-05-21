@@ -27,12 +27,12 @@ model Project {
   categories  String
   videoEmbed  String?
   coverImage  String?
-  coverVideo  String?
   images      String   @default("[]")
   featured    Boolean  @default(false)
   published   Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+  coverVideo  String?
 }
 
 model TeamMember {
@@ -71,11 +71,11 @@ model PageContent {
 }
 
 model Client {
-  id        String   @id @default(cuid())
-  order     Int      @default(0)
+  id        String  @id @default(cuid())
+  order     Int     @default(0)
   name      String
   logo      String?
-  published Boolean  @default(true)
+  published Boolean @default(true)
 }
 
 model SiteSettings {
@@ -86,14 +86,14 @@ model SiteSettings {
 }
 
 model Post {
-  id          String   @id @default(cuid())
-  slug        String   @unique
-  title       String
-  excerpt     String?
-  content     String
-  coverImage  String?
-  categories  String   @default("")
-  published   Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id         String   @id @default(cuid())
+  slug       String   @unique
+  title      String
+  excerpt    String?
+  content    String
+  coverImage String?
+  categories String   @default("")
+  published  Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 }

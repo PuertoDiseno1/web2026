@@ -47,58 +47,6 @@ export default function ServiceSlider({ images, alt }: ServiceSliderProps) {
 
       {total > 1 && (
         <>
-          {/* Arrows */}
-          <button
-            onClick={prev}
-            aria-label="Anterior"
-            style={{
-              position: "absolute",
-              left: "0.75rem",
-              top: "50%",
-              transform: "translateY(-50%)",
-              background: "rgba(10,10,10,0.45)",
-              border: "none",
-              color: "#fff",
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1rem",
-              zIndex: 2,
-              transition: "background 0.2s",
-            }}
-          >
-            ‹
-          </button>
-          <button
-            onClick={next}
-            aria-label="Siguiente"
-            style={{
-              position: "absolute",
-              right: "0.75rem",
-              top: "50%",
-              transform: "translateY(-50%)",
-              background: "rgba(10,10,10,0.45)",
-              border: "none",
-              color: "#fff",
-              width: 32,
-              height: 32,
-              borderRadius: "50%",
-              cursor: "pointer",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "1rem",
-              zIndex: 2,
-              transition: "background 0.2s",
-            }}
-          >
-            ›
-          </button>
-
           {/* Dots */}
           <div
             style={{
@@ -120,7 +68,7 @@ export default function ServiceSlider({ images, alt }: ServiceSliderProps) {
                   width: i === current ? 18 : 6,
                   height: 6,
                   borderRadius: 3,
-                  background: i === current ? "#c8f25a" : "rgba(255,255,255,0.5)",
+                  background: i === current ? "#cbfd00" : "rgba(255,255,255,0.5)",
                   border: "none",
                   cursor: "pointer",
                   padding: 0,

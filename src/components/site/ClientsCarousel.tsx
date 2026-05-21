@@ -28,7 +28,7 @@ export default function ClientsCarousel({ logos }: ClientsCarouselProps) {
           top: 0,
           bottom: 0,
           width: 80,
-          background: "linear-gradient(to right, #fff, transparent)",
+          background: "linear-gradient(to right, #f3f2f4, transparent)",
           zIndex: 2,
           pointerEvents: "none",
         }}
@@ -40,7 +40,7 @@ export default function ClientsCarousel({ logos }: ClientsCarouselProps) {
           top: 0,
           bottom: 0,
           width: 80,
-          background: "linear-gradient(to left, #fff, transparent)",
+          background: "linear-gradient(to left, #f3f2f4, transparent)",
           zIndex: 2,
           pointerEvents: "none",
         }}
@@ -63,7 +63,7 @@ export default function ClientsCarousel({ logos }: ClientsCarouselProps) {
               alignItems: "center",
               justifyContent: "center",
               padding: "0 2.5rem",
-              height: 80,
+              height: 100,
               borderRight: "1px solid #e0e0e0",
               flexShrink: 0,
             }}
@@ -71,14 +71,14 @@ export default function ClientsCarousel({ logos }: ClientsCarouselProps) {
             <Image
               src={`/clientes/${logo}`}
               alt={logo.replace(/\.[^.]+$/, "")}
-              width={120}
-              height={50}
+              width={150}
+              height={65}
               style={{
                 objectFit: "contain",
                 filter: "grayscale(100%)",
                 opacity: 0.7,
                 transition: "filter 0.3s, opacity 0.3s",
-                maxHeight: 50,
+                maxHeight: 65,
                 width: "auto",
               }}
               className="carousel-logo"

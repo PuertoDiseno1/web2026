@@ -1,5 +1,116 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
+
+/* Mundial — Hair */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialHair.otf') format('opentype');
+  font-weight: 100;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialHairItalic.otf') format('opentype');
+  font-weight: 100;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mundial — Thin */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialThin.otf') format('opentype');
+  font-weight: 200;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialThinItalic.otf') format('opentype');
+  font-weight: 200;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mundial — Light */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialLight.otf') format('opentype');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialLightItalic.otf') format('opentype');
+  font-weight: 300;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mundial — Regular */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialRegular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialItalic.otf') format('opentype');
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mundial — DemiBold */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialDemibold.otf') format('opentype');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialDemiboldItalic.otf') format('opentype');
+  font-weight: 600;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mundial — Bold */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialBoldItalic.otf') format('opentype');
+  font-weight: 700;
+  font-style: italic;
+  font-display: swap;
+}
+
+/* Mundial — Black */
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialBlack.otf') format('opentype');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: 'Mundial';
+  src: url('/fonts/MundialBlackItalic.otf') format('opentype');
+  font-weight: 900;
+  font-style: italic;
+  font-display: swap;
+}
 
 :root {
   --color-black: #0a0a0a;
@@ -7,7 +118,7 @@
   --color-accent: #c8f25a;
   --color-gray: #888;
   --color-gray-light: #d4d4d4;
-  --font-main: 'Outfit', 'Mundial', -apple-system, sans-serif;
+  --font-main: 'Mundial', -apple-system, sans-serif;
 }
 
 @theme inline {
@@ -24,6 +135,27 @@
 
 html {
   scroll-behavior: smooth;
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1000;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #25D366;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.35);
 }
 
 body {
@@ -111,6 +243,7 @@ img {
 .home-services-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: stretch;
   border-top: 1px solid #e0e0e0;
 }
 @media (max-width: 680px) {

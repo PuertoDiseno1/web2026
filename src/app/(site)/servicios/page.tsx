@@ -118,10 +118,10 @@ export default async function ServiciosPage() {
         const sliderEl = (
           <div>
             <ServiceSlider images={images} alt={sv.title.replace("\n", " ")} />
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.25rem 1rem", marginTop: "1.5rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.15rem 1rem", marginTop: "1.5rem" }}>
               {items.map((item) => (
-                <p key={item} style={{ fontSize: "clamp(0.85rem, 1.5vw, 2rem)", fontWeight: 300, display: "flex", alignItems: "baseline", gap: "0.4rem", margin: 0 }}>
-                  <span style={{ color: "#1442f0", fontWeight: 600, flexShrink: 0 }}>›</span>
+                <p key={item} style={{ fontSize: "clamp(0.75rem, 0.9vw, 0.95rem)", fontWeight: 300, display: "flex", alignItems: "center", gap: "0.35rem", margin: 0, borderBottom: "1px solid #0042e1", paddingBottom: "0.4rem", paddingTop: "0.4rem" }}>
+                  <span style={{ color: "#1442f0", fontWeight: 600, flexShrink: 0, fontSize: "0.8rem" }}>›</span>
                   <span style={{ color: "#1442f0" }}>{item}</span>
                 </p>
               ))}

@@ -54,7 +54,7 @@ export default function HeroVideo({ muxId }: { muxId: string }) {
           minHeight: "100%",
           transform: "translate(-50%, -50%)",
           objectFit: "cover",
-          opacity: 0.55,
+          opacity: 1,
         }}
       />
     </div>

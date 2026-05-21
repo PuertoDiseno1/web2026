@@ -3,13 +3,15 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import MuxVideo from "./MuxVideo";
 
 type Project = {
   id: string | number;
   slug: string;
   title: string;
   categories: string | null;
-  images: string | null;
+  coverImage: string | null;
+  coverVideo: string | null;
 };
 
 // Each slot has a "current" shown layer and an "incoming" layer fading in on top
@@ -19,15 +21,20 @@ type SlotState = {
   phase: "idle" | "entering"; // entering = incoming layer is fading in
 };
 
-function parseImages(raw: string | null | undefined): string[] {
-  if (!raw) return [];
-  try { return JSON.parse(raw); } catch { return []; }
+function isGif(src: string | null | undefined): boolean {
+  return !!src && src.toLowerCase().endsWith(".gif");
+}
+
+function getMuxPlaybackId(val: string | null | undefined): string | null {
+  if (!val) return null;
+  const match = val.match(/player\.mux\.com\/([^?#/]+)/);
+  return match ? match[1] : val.trim();
 }
 
 const COL_CONFIG = [
-  { heights: [350, 265, 265], bgs: ["#c0303b", "#1a3f8f", "#ede5df"] },
-  { heights: [265, 263, 350], bgs: ["#c3c3c3", "#8a8a74", "#181c20"] },
-  { heights: [350, 265, 265], bgs: ["#cbe800", "#04afbb", "#e0c8dc"] },
+  { heights: [480, 395, 395], bgs: ["#c0303b", "#1a3f8f", "#ede5df"] },
+  { heights: [395, 393, 480], bgs: ["#c3c3c3", "#8a8a74", "#181c20"] },
+  { heights: [480, 395, 395], bgs: ["#cbe800", "#04afbb", "#e0c8dc"] },
 ];
 
 const LIGHT_BG = new Set(["#cbe800", "#ede5df", "#c3c3c3", "#e0c8dc"]);
@@ -36,9 +43,9 @@ const COL_INDICES = [[0, 3, 6], [1, 4, 7], [2, 5, 8]];
 // Stagger delays per slot index so rotations feel organic, not synchronised
 const SLOT_STAGGER_MS = [0, 600, 1400, 300, 1100, 700, 1800, 200, 900];
 // Base interval between rotation cycles
-const BASE_INTERVAL_MS = 3800;
+const BASE_INTERVAL_MS = 6000;
 // Crossfade duration
-const CROSSFADE_MS = 900;
+const CROSSFADE_MS = 1400;
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -53,6 +60,7 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
   const [slots, setSlots] = useState<SlotState[]>([]);
   const slotsRef = useRef<SlotState[]>([]);
   const projectsRef = useRef(projects);
+  const pausedRef = useRef(false);
 
   // Init 9 random slots
   useEffect(() => {
@@ -69,6 +77,7 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
   const rotateSlot = useCallback((slotIdx: number) => {
     const current = slotsRef.current;
     if (!current[slotIdx]) return;
+    if (pausedRef.current) return;
 
     // Find a project not currently visible (include incoming slots too)
     const visibleIds = new Set(
@@ -132,10 +141,20 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
       <style>{`
         .mosaic-cell { position: relative; overflow: hidden; display: block; flex-shrink: 0; }
         .mosaic-cell:hover .mosaic-img-layer { transform: scale(1.06); }
-        .mosaic-cell:hover .mosaic-overlay { background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.15) 55%, transparent 100%) !important; }
         .mosaic-cell:hover .mosaic-title { letter-spacing: 0.01em; }
+        .mosaic-hover-overlay {
+          position: absolute; inset: 0; z-index: 4;
+          opacity: 0;
+          transition: opacity 0.45s ease;
+          display: flex; flex-direction: column; justify-content: flex-end;
+          padding: 0.85rem;
+          background: #cbfd00;
+        }
+        .mosaic-cell:hover .mosaic-hover-overlay { opacity: 1; }
         .mosaic-img-layer {
           position: absolute; inset: 0;
+          width: 100%; height: 100%;
+          overflow: hidden;
           transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
           will-change: transform;
         }
@@ -167,18 +186,21 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
         .mosaic-cell:hover .mosaic-cat { opacity: 1 !important; transform: translateY(0) !important; }
         /* Mobile: mantener 3 columnas con proporciones, escalar ~50% */
         @media (max-width: 640px) {
-          .mosaic-cell-lg { height: 175px !important; }
-          .mosaic-cell-sm { height: 133px !important; }
+          .mosaic-cell-lg { height: 305px !important; }
+          .mosaic-cell-sm { height: 263px !important; }
           .mosaic-title { font-size: 0.62rem !important; }
           .mosaic-cat { display: none; }
         }
         @media (min-width: 641px) and (max-width: 900px) {
-          .mosaic-cell-lg { height: 240px !important; }
-          .mosaic-cell-sm { height: 182px !important; }
+          .mosaic-cell-lg { height: 370px !important; }
+          .mosaic-cell-sm { height: 312px !important; }
         }
       `}</style>
 
-      <div style={{ display: "flex", gap: "4px" }}>
+      <div style={{ display: "flex", gap: "4px" }}
+        onMouseEnter={() => { pausedRef.current = true; }}
+        onMouseLeave={() => { pausedRef.current = false; }}
+      >
         {COL_INDICES.map((colSlots, ci) => (
           <div key={ci} className={`mosaic-col mosaic-col-${ci}`} style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1 }}>
             {colSlots.map((slotIdx, ri) => {
@@ -190,27 +212,34 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
               const isLight = LIGHT_BG.has(bg);
 
               const renderLayer = (p: Project, extra?: React.CSSProperties) => {
-                const imgs = parseImages(p.images);
                 return (
                   <div style={{ position: "absolute", inset: 0, ...extra }}>
-                    {imgs[0] && (
+                    {p.coverVideo ? (
                       <div className="mosaic-img-layer">
-                        <Image src={imgs[0]} alt={p.title} fill style={{ objectFit: "cover" }} sizes="33vw" />
+                        <MuxVideo playbackId={getMuxPlaybackId(p.coverVideo)!} />
                       </div>
-                    )}
+                    ) : p.coverImage && isGif(p.coverImage) ? (
+                      <div className="mosaic-img-layer">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src={p.coverImage} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      </div>
+                    ) : p.coverImage ? (
+                      <div className="mosaic-img-layer">
+                        <Image src={p.coverImage} alt={p.title} fill style={{ objectFit: "cover" }} sizes="33vw" />
+                      </div>
+                    ) : null}
                   </div>
                 );
               };
 
-              const currentImgs = parseImages(current.images);
-              const hasImg = currentImgs.length > 0;
+              const hasImg = !!(current.coverVideo || current.coverImage);
 
               return (
                 <Link
                   key={slotIdx}
                   href={`/proyectos/${current.slug}`}
                   className={`mosaic-cell ${h >= 300 ? "mosaic-cell-lg" : "mosaic-cell-sm"}`}
-                  style={{ height: h, background: bg }}
+                  style={{ height: h, background: bg, "--cell-bg": bg } as React.CSSProperties}
                 >
                   {/* Current layer (bottom) */}
                   {renderLayer(current)}
@@ -225,6 +254,16 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
                     </div>
                   )}
 
+                  {/* Hover colour overlay with title */}
+                  <div className="mosaic-hover-overlay">
+                    <p style={{ fontSize: "0.65rem", letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.4rem", lineHeight: 1.2, color: "rgba(0,66,225,0.7)" }}>
+                      {current.categories?.split("\n")[0]}
+                    </p>
+                    <h3 style={{ fontSize: "1.5rem", fontWeight: 700, lineHeight: 1.2, color: "#0042e1" }}>
+                      {current.title}
+                    </h3>
+                  </div>
+
                   {/* Text overlay — always on top, href points to current */}
                   <div
                     className="mosaic-overlay"
@@ -232,6 +271,8 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
                       background: hasImg
                         ? "linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.05) 50%, transparent 100%)"
                         : "none",
+                      opacity: phase === "entering" ? 0 : 1,
+                      transition: `opacity ${phase === "entering" ? CROSSFADE_MS * 0.4 : CROSSFADE_MS * 0.5}ms ease ${phase === "entering" ? 0 : CROSSFADE_MS * 0.5}ms`,
                     }}
                   >
                     <p

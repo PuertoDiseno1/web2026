@@ -53,10 +53,62 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
   const images = JSON.parse(project.images || "[]") as string[];
   const services = project.services.split("\n").filter(Boolean);
 
+  // Extraer Mux Playback ID desde URL completa o ID directo
+  function extractMuxId(val: string): string {
+    const match = val.match(/player\.mux\.com\/([^?#/]+)/);
+    return match ? match[1] : val.trim();
+  }
+
+  // Build video embed URL → iframe src
+  function getEmbedSrc(url: string): string | null {
+    if (!url) return null;
+    // Mux player URL o Playback ID puro
+    if (url.includes("player.mux.com") || /^[A-Za-z0-9]+$/.test(url.trim())) {
+      const id = extractMuxId(url);
+      return `https://player.mux.com/${id}?autoplay=true&muted=true&loop=true`;
+    }
+    // YouTube
+    const yt = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]+)/);
+    if (yt) return `https://www.youtube.com/embed/${yt[1]}?autoplay=1&mute=1&loop=1&playlist=${yt[1]}`;
+    // Vimeo
+    const vi = url.match(/vimeo\.com\/(\d+)/);
+    if (vi) return `https://player.vimeo.com/video/${vi[1]}?autoplay=1&muted=1&loop=1`;
+    return null; // direct video URL
+  }
+
+  // Usar videoEmbed primero, luego coverVideo como fallback para el hero
+  const rawVideoUrl = project.videoEmbed?.trim() || project.coverVideo?.trim() || null;
+  const videoUrl = rawVideoUrl;
+  const embedSrc = videoUrl ? getEmbedSrc(videoUrl) : null;
+  const isMux = !!(videoUrl && (videoUrl.includes("player.mux.com") || /^[A-Za-z0-9]+$/.test(videoUrl)));
+  const isDirectVideo = videoUrl && !embedSrc && !isMux;
+
   return (
     <div style={{ background: "#fff", minHeight: "100vh" }}>
-      {/* HERO — imagen a full ancho */}
-      {project.coverImage && (
+      {/* HERO — video tiene prioridad sobre imagen */}
+      {videoUrl ? (
+        <div style={{ width: "100%", aspectRatio: "16/7", position: "relative", overflow: "hidden", background: "#000" }}>
+          {embedSrc ? (
+            /* Mux/YouTube/Vimeo iframe — recortar ~62px abajo para ocultar controles Mux */
+            <div style={{ position: "absolute", inset: 0, bottom: isMux ? "-62px" : 0, overflow: "hidden" }}>
+              <iframe
+                src={embedSrc}
+                allow="autoplay; fullscreen; picture-in-picture; muted"
+                style={{ position: "absolute", inset: 0, width: "100%", height: isMux ? "calc(100% + 62px)" : "100%", border: "none" }}
+              />
+            </div>
+          ) : (
+            <video
+              src={videoUrl}
+              autoPlay
+              muted
+              loop
+              playsInline
+              style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+            />
+          )}
+        </div>
+      ) : project.coverImage && (
         <div style={{ width: "100%", aspectRatio: "16/7", position: "relative", overflow: "hidden" }}>
           <Image
             src={project.coverImage}
@@ -123,16 +175,6 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         </div>
       </section>
 
-      {/* VIDEO */}
-      {project.videoEmbed && (
-        <section style={{ padding: "0 2.5rem 3rem" }}>
-          <div
-            style={{ maxWidth: 1200, margin: "0 auto", borderRadius: "6px", overflow: "hidden" }}
-            dangerouslySetInnerHTML={{ __html: project.videoEmbed }}
-          />
-        </section>
-      )}
-
       {/* GALERÍA */}
       {images.length > 0 && (
         <section style={{ padding: "0 2.5rem 5rem" }}>
@@ -176,9 +218,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         {prev ? (
           <Link
             href={`/proyectos/${prev.slug}`}
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.9rem", color: "#1442f0", fontWeight: 500, textDecoration: "none" }}
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "1.25rem", color: "#1442f0", fontWeight: 500, textDecoration: "none" }}
           >
-            <span style={{ fontSize: "1.1rem" }}>‹</span> Anterior
+            <span style={{ fontSize: "1.6rem" }}>‹</span> Anterior
           </Link>
         ) : (
           <span />
@@ -186,9 +228,9 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
         {next ? (
           <Link
             href={`/proyectos/${next.slug}`}
-            style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "0.9rem", color: "#1442f0", fontWeight: 500, textDecoration: "none" }}
+            style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "1.25rem", color: "#1442f0", fontWeight: 500, textDecoration: "none" }}
           >
-            Siguiente <span style={{ fontSize: "1.1rem" }}>›</span>
+            Siguiente <span style={{ fontSize: "1.6rem" }}>›</span>
           </Link>
         ) : (
           <span />

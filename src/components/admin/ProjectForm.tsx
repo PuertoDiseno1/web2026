@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import MuxVideo from "@/components/site/MuxVideo";
 
 interface Project {
   id?: string;
@@ -33,6 +34,8 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
   const [deleting, setDeleting] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const [msg, setMsg] = useState("");
 
   const isEdit = !!project?.id;
@@ -85,6 +88,13 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
   function removeImage(index: number) {
     const imgs = JSON.parse(data.images || "[]") as string[];
     imgs.splice(index, 1);
+    update("images", JSON.stringify(imgs));
+  }
+
+  function moveImage(from: number, to: number) {
+    const imgs = JSON.parse(data.images || "[]") as string[];
+    const [item] = imgs.splice(from, 1);
+    imgs.splice(to, 0, item);
     update("images", JSON.stringify(imgs));
   }
 
@@ -185,13 +195,15 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
           </div>
 
           <div style={fieldStyle}>
-            <label style={labelStyle}>Embed de video (iframe HTML)</label>
-            <textarea
-              style={{ ...inputStyle, minHeight: 100, resize: "vertical", fontFamily: "monospace", fontSize: "0.8rem" }}
+            <label style={labelStyle}>URL de video (hero del proyecto)</label>
+            <input
+              style={inputStyle}
+              type="url"
               value={data.videoEmbed}
               onChange={(e) => update("videoEmbed", e.target.value)}
-              placeholder='<iframe src="https://player.mux.com/..." ...></iframe>'
+              placeholder="https://www.youtube.com/watch?v=... o https://vimeo.com/..."
             />
+            <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.35rem" }}>Pega la URL del video. Se mostrará como hero en la parte superior del proyecto.</p>
           </div>
         </div>
 
@@ -253,15 +265,15 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
           <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid #e8e8e8" }}>
             <h3 style={{ fontSize: "0.875rem", fontWeight: 700, marginBottom: "0.35rem", color: "#0a0a0a" }}>Portada de video</h3>
             <p style={{ fontSize: "0.75rem", color: "#888", marginBottom: "0.75rem" }}>Pega el Playback ID de Mux. Tiene prioridad sobre la imagen.</p>
-            {data.coverVideo && (
-              <div style={{ aspectRatio: "4/3", background: "#000", borderRadius: "4px", overflow: "hidden", marginBottom: "0.75rem" }}>
-                <video
-                  src={`https://stream.mux.com/${data.coverVideo}/high.mp4`}
-                  autoPlay muted loop playsInline
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
-                />
-              </div>
-            )}
+            {data.coverVideo && (() => {
+              const muxMatch = data.coverVideo.match(/player\.mux\.com\/([^?#/]+)/);
+              const muxId = muxMatch ? muxMatch[1] : data.coverVideo.trim();
+              return (
+                <div style={{ aspectRatio: "4/3", borderRadius: "4px", overflow: "hidden", marginBottom: "0.75rem", position: "relative" }}>
+                  <MuxVideo playbackId={muxId} />
+                </div>
+              );
+            })()}
             <input
               style={{ fontSize: "0.8rem", width: "100%", padding: "0.4rem 0.6rem", border: "1px solid #e0e0e0", borderRadius: "4px" }}
               type="text"
@@ -271,16 +283,34 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
             />
           </div>
 
-          {/* Gallery */}
           <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid #e8e8e8" }}>
-            <h3 style={{ fontSize: "0.875rem", fontWeight: 700, marginBottom: "1rem", color: "#0a0a0a" }}>Galería de imágenes</h3>
+            <h3 style={{ fontSize: "0.875rem", fontWeight: 700, marginBottom: "0.35rem", color: "#0a0a0a" }}>Galería de imágenes</h3>
+            <p style={{ fontSize: "0.75rem", color: "#888", marginBottom: "0.75rem" }}>Arrastra para reordenar. La primera imagen es la portada.</p>
             {images.length > 0 && (
               <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: "0.5rem", marginBottom: "0.75rem" }}>
                 {images.map((img, i) => (
-                  <div key={i} style={{ position: "relative" }}>
+                  <div
+                    key={img + i}
+                    draggable
+                    onDragStart={() => setDragIndex(i)}
+                    onDragOver={(e) => { e.preventDefault(); setDragOverIndex(i); }}
+                    onDrop={(e) => { e.preventDefault(); if (dragIndex !== null && dragIndex !== i) moveImage(dragIndex, i); setDragIndex(null); setDragOverIndex(null); }}
+                    onDragEnd={() => { setDragIndex(null); setDragOverIndex(null); }}
+                    style={{
+                      position: "relative",
+                      cursor: "grab",
+                      opacity: dragIndex === i ? 0.4 : 1,
+                      outline: dragOverIndex === i && dragIndex !== i ? "2px solid #0042e1" : "none",
+                      borderRadius: "4px",
+                      transition: "opacity 0.15s",
+                    }}
+                  >
                     <div style={{ aspectRatio: "1", position: "relative", borderRadius: "4px", overflow: "hidden" }}>
                       <Image src={img} alt={`img-${i}`} fill style={{ objectFit: "cover" }} />
                     </div>
+                    {i === 0 && (
+                      <span style={{ position: "absolute", bottom: 4, left: 4, background: "#0042e1", color: "#fff", fontSize: "0.55rem", fontWeight: 700, padding: "1px 5px", borderRadius: "3px", letterSpacing: "0.03em" }}>PORTADA</span>
+                    )}
                     <button
                       type="button"
                       onClick={() => removeImage(i)}

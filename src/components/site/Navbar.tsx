@@ -50,9 +50,9 @@ export default function Navbar() {
           justifyContent: "space-between",
           padding: "1.25rem 2.5rem",
           transition: "background 0.3s",
-          background: open ? "transparent" : scrolled ? "rgba(10,10,10,0.97)" : "transparent",
-          backdropFilter: !open && scrolled ? "blur(12px)" : "none",
-          borderBottom: !open && scrolled ? "1px solid rgba(255,255,255,0.06)" : "none",
+          background: open ? "transparent" : scrolled ? "#0042e1" : "transparent",
+          backdropFilter: "none",
+          borderBottom: "none",
         }}
       >
         <Link
@@ -80,12 +80,12 @@ export default function Navbar() {
                   key={l.href}
                   href={l.href}
                   style={{
-                    fontSize: "0.82rem",
+                    fontSize: "1.05rem",
                     fontWeight: active ? 600 : 400,
                     padding: "0.4rem 0.9rem",
                     clipPath: active ? CUT : "none",
-                    color: active ? "#fff" : linkColor,
-                    background: active ? "#1442f0" : "transparent",
+                    color: active ? "#00285f" : linkColor,
+                    background: active ? "#cbfd00" : "transparent",
                     transition: "background 0.2s",
                     letterSpacing: "0.01em",
                   }}

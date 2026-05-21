@@ -49,7 +49,7 @@ export default async function HomePage() {
       {/* ═══ HERO ═══ */}
       <section
         style={{
-          minHeight: "100vh",
+          minHeight: "70vh",
           background: "#04081c",
           position: "relative",
           display: "flex",
@@ -72,19 +72,7 @@ export default async function HomePage() {
           />
         )}
 
-        {/* Gradient overlay */}
-        <div
-          style={{
-            position: "absolute",
-            inset: 0,
-            background: muxId
-              ? "linear-gradient(to top, #04081c 25%, rgba(4,8,28,0.25) 100%)"
-              : featuredImages[0]
-              ? "linear-gradient(to top, #04081c 30%, rgba(4,8,28,0.3) 100%)"
-              : "linear-gradient(135deg, #04081c 0%, #08143a 50%, #04081c 100%)",
-            zIndex: 1,
-          }}
-        />
+
 
         {/* Hero content — intentionally empty */}
       </section>
@@ -107,7 +95,7 @@ export default async function HomePage() {
             Desarrollamos marcas sólidas a través de procesos rigurosos y equipos{" "}
             <mark
               style={{
-                background: "linear-gradient(150deg, transparent 9%, #c8f25a 9%)",
+                background: "linear-gradient(150deg, transparent 9%, #cbfd00 9%)",
                 color: "#1442f0",
                 padding: "0 0.15em",
                 borderRadius: 0,
@@ -122,14 +110,14 @@ export default async function HomePage() {
           <div
             className="home-services-grid"
             style={{
-              borderTop: "1px solid #e0e0e0",
+              borderTop: "none",
               // responsive via .home-services-grid
             }}
           >
             {[
               {
                 num: "01",
-                title: "Estrategia de marca",
+                title: "Estrategia de\nmarca",
                 desc: "Definimos dirección, foco y criterio clave para construir marcas coherentes y sostenibles en el tiempo.",
               },
               {
@@ -139,7 +127,7 @@ export default async function HomePage() {
               },
               {
                 num: "03",
-                title: "Diseño industrial",
+                title: "Diseño\nindustrial",
                 desc: "Diseñamos espacios y experiencias coherentes que conectan, marcan, espacios y personas.",
               },
             ].map((sv, i, arr) => (
@@ -148,11 +136,11 @@ export default async function HomePage() {
                 style={{
                   padding: "2.5rem 2rem 2.5rem 0",
                   paddingRight: i < arr.length - 1 ? "2.5rem" : "0",
-                  borderRight: i < arr.length - 1 ? "1px solid #e0e0e0" : "none",
+                  borderRight: "none",
                   marginLeft: i > 0 ? "2.5rem" : "0",
                 }}
               >
-                <div style={{ display: "flex", alignItems: "baseline", gap: "0.6rem", marginBottom: "0.85rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "0 0.6rem", alignItems: "start" }}>
                   <span
                     style={{
                       fontSize: "1.5rem",
@@ -160,26 +148,37 @@ export default async function HomePage() {
                       color: "#1442f0",
                       letterSpacing: "0.02em",
                       flexShrink: 0,
+                      paddingTop: "0.1em",
                     }}
                   >
                     {sv.num} |
                   </span>
-                  <h2
-                    style={{
-                      fontSize: "clamp(1.2rem, 1.8vw, 2rem)",
-                      fontWeight: 100,
-                      color: "#111",
-                      letterSpacing: "-0.02em",
-                      lineHeight: 1.15,
-                      margin: 0,
-                    }}
-                  >
-                    {sv.title}
-                  </h2>
+                  <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
+                    <h2
+                      style={{
+                        fontSize: "clamp(1.5rem, 2.2vw, 2.5rem)",
+                        fontWeight: 100,
+                        color: "#111",
+                        letterSpacing: "-0.02em",
+                        lineHeight: 1.15,
+                        margin: "0 0 0.85rem",
+                        whiteSpace: "pre-line",
+                        minHeight: "5.5rem",
+                      }}
+                    >
+                      {sv.title}
+                    </h2>
+                    <p style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)", fontWeight: 300, color: "#666", lineHeight: 1.6, margin: "0 0 1.25rem", flex: 1 }}>
+                      {sv.desc}
+                    </p>
+                    <Link href="/servicios" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "clamp(0.8rem, 0.95vw, 0.95rem)", fontWeight: 400, color: "#1442f0", textDecoration: "none", letterSpacing: "0.01em" }}>
+                      Ver más
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#1442f0" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+                      </svg>
+                    </Link>
+                  </div>
                 </div>
-                <p style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)", fontWeight: 300, color: "#666", lineHeight: 1.6 }}>
-                  {sv.desc}
-                </p>
               </div>
             ))}
           </div>
@@ -197,7 +196,7 @@ export default async function HomePage() {
               className="btn-proyectos"
               style={{
                 display: "inline-block",
-                background: "#c8f25a",
+                background: "#cbfd00",
                 padding: "12px 36px",
                 borderRadius: 0,
                 fontSize: "clamp(1rem, 1.5vw, 2.375rem)",
@@ -214,13 +213,13 @@ export default async function HomePage() {
       </section>
 
       {/* ═══ STATS ═══ */}
-      <section className="sp spv" style={{ background: "#1442f0", padding: "4rem 2.5rem" }}>
+      <section className="sp spv" style={{ background: "radial-gradient(circle at 95% 5%, rgba(255,255,255,0.55) 0%, rgba(255,255,255,0.15) 20%, transparent 40%), #1442f0", padding: "4rem 2.5rem" }}>
         <div style={{ maxWidth: 1400, margin: "0 auto" }}>
           <h2
             style={{
               fontSize: "clamp(1.4rem, 3.5vw, 4.1875rem)",
               fontWeight: 100,
-              color: "#c8f25a",
+              color: "#cbfd00",
               textAlign: "center",
               letterSpacing: "-0.02em",
               marginBottom: "3rem",
@@ -274,11 +273,9 @@ export default async function HomePage() {
             ].map((item, i) => (
               <div
                 key={item.highlight}
-                style={{
-                  padding: "2.5rem",
-                  borderLeft: "3px solid #1442f0",
-                }}
+                style={{ padding: "2.5rem" }}
               >
+                <div style={{ borderLeft: "1px solid #1442f0", paddingLeft: "1.5rem" }}>
                 <h3
                   style={{
                     fontSize: "clamp(1.2rem, 2.2vw, 2.9375rem)",
@@ -294,9 +291,9 @@ export default async function HomePage() {
                     {item.line2}{" "}
                     <mark
                       style={{
-                        background: "linear-gradient(150deg, transparent 9%, #c8f25a 9%)",
-                        color: "#1442f0",
-                        padding: "0 0.15em",
+                        background: "linear-gradient(150deg, transparent 9%, #cbfd00 9%)",
+                        color: "#00285f",
+                        padding: "0 0.2em",
                         borderRadius: 0,
                         fontStyle: "normal",
                         display: "inline-block",
@@ -309,6 +306,7 @@ export default async function HomePage() {
                 <p style={{ fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)", fontWeight: 300, color: "#555", lineHeight: 1.6 }}>
                   {item.desc}
                 </p>
+                </div>
               </div>
             ))}
           </div>
@@ -319,7 +317,7 @@ export default async function HomePage() {
       {logos.length > 0 && (
         <section
           style={{
-            background: "#fff",
+            background: "#f3f2f4",
             borderTop: "1px solid #e0e0e0",
             padding: "0",
           }}

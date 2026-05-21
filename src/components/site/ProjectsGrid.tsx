@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import MuxVideo from "./MuxVideo";
 
 interface Project {
   id: string;
@@ -14,9 +15,13 @@ interface Project {
   coverVideo?: string | null;
 }
 
+function getMuxPlaybackId(val: string): string {
+  const match = val.match(/player\.mux\.com\/([^?#/]+)/);
+  return match ? match[1] : val.trim();
+}
+
 const CATS = [
   "Todos",
-  "Identidad visual",
   "Diseño editorial",
   "Packaging",
   "Diseño industrial",
@@ -60,7 +65,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                 border: "none",
                 cursor: "pointer",
                 fontFamily: "inherit",
-                fontSize: "clamp(0.8rem, 3vw, 1.875rem)",
+                fontSize: "clamp(0.7rem, 1vw, 1.1rem)",
                 fontWeight: active === cat ? 600 : 300,
                 color: active === cat ? "#111" : "#888",
                 padding: "0.25rem 0",
@@ -74,7 +79,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
             if (i === 0) return [el];
             return [
               ...acc,
-              <span key={`sep-${i}`} style={{ color: "#ccc", margin: "0 0.75rem", fontSize: "clamp(0.8rem, 3vw, 1.875rem)" }}>|</span>,
+              <span key={`sep-${i}`} style={{ color: "#ccc", margin: "0 0.75rem", fontSize: "clamp(0.7rem, 1vw, 1.1rem)" }}>|</span>,
               el,
             ];
           }, [])}
@@ -82,78 +87,109 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
       </div>
 
       {/* MASONRY GRID */}
-      <div
-        style={{
-          padding: "0",
-          columnCount: 3,
-          columnGap: 0,
-        }}
-        className="projects-masonry"
-      >
-        {filtered.map((p) => (
-          <Link
-            key={p.id}
-            href={`/proyectos/${p.slug}`}
-            style={{ display: "block", breakInside: "avoid", position: "relative", overflow: "hidden" }}
-            className="project-tile"
-          >
-            <div style={{ position: "relative", width: "100%" }}>
-              {p.coverImage ? (
-                <Image
-                  src={p.coverImage}
-                  alt={p.title}
-                  width={600}
-                  height={600}
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  style={{ width: "100%", height: "auto", display: "block" }}
-                />
-              ) : (
-                <div style={{ aspectRatio: "1/1", background: "#e8e8e8" }} />
-              )}
-              {/* Hover overlay */}
-              <div className="project-tile-overlay">
-                <p className="project-tile-title">{p.title}</p>
+      {(() => {
+        const cols: typeof filtered[] = [[], [], []];
+        filtered.forEach((p, i) => cols[i % 3].push(p));
+        return (
+          <div style={{ display: "flex", gap: "12px", alignItems: "stretch" }} className="projects-masonry">
+            {cols.map((col, ci) => (
+              <div key={ci} style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
+                {col.map((p, pi) => {
+                  const isLast = pi === col.length - 1;
+                  return (
+                  <Link
+                    key={p.id}
+                    href={`/proyectos/${p.slug}`}
+                    style={{ display: "block", position: "relative", overflow: "hidden", ...(isLast ? { flex: 1 } : {}) }}
+                    className="project-tile"
+                  >
+                    <div style={{ position: "relative", width: "100%", height: isLast ? "100%" : "auto" }}>
+                      {/* Imagen base siempre visible */}
+                      {p.coverImage && (
+                        p.coverImage.toLowerCase().endsWith(".gif") ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img src={p.coverImage} alt={p.title} style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: "cover", display: "block", minHeight: isLast ? "200px" : undefined }} />
+                        ) : (
+                          <Image src={p.coverImage} alt={p.title} width={600} height={600} sizes="(max-width: 768px) 100vw, 33vw" style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: isLast ? "cover" : undefined, display: "block", minHeight: isLast ? "200px" : undefined }} />
+                        )
+                      )}
+                      {!p.coverImage && (
+                        <div style={{ aspectRatio: isLast ? undefined : "1/1", height: isLast ? "100%" : undefined, background: "#e8e8e8", minHeight: isLast ? "200px" : undefined }} />
+                      )}
+                      {/* Video Mux con HLS nativo — funciona en todos los browsers */}
+                      {p.coverVideo && (
+                        <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden" }}>
+                          <MuxVideo playbackId={getMuxPlaybackId(p.coverVideo)} />
+                        </div>
+                      )}
+                      {/* Hover overlay */}
+                      <div className="project-tile-overlay">
+                        <div className="project-tile-text">
+                          <p className="project-tile-category">{p.categories.split("\n")[0].trim()}</p>
+                          <p className="project-tile-title">{p.title}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                  );
+                })}
               </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+            ))}
+          </div>
+        );
+      })()}
 
       <style>{`
         .projects-masonry {
-          column-count: 3;
+          align-items: stretch;
         }
         @media (max-width: 900px) {
-          .projects-masonry { column-count: 2; }
+          .projects-masonry { flex-wrap: wrap; }
+          .projects-masonry > div { flex: 1 1 45%; }
         }
         @media (max-width: 550px) {
-          .projects-masonry { column-count: 1; }
+          .projects-masonry > div { flex: 1 1 100%; }
         }
         .project-tile-overlay {
           position: absolute;
           inset: 0;
-          background: rgba(10,10,10,0);
+          background: #cbfd00;
+          opacity: 0;
           display: flex;
           align-items: flex-end;
-          padding: 1.25rem;
-          transition: background 0.3s;
+          padding: 1.5rem;
+          transition: opacity 0.35s ease;
         }
         .project-tile:hover .project-tile-overlay {
-          background: rgba(10,10,10,0.55);
+          opacity: 1;
         }
-        .project-tile-title {
-          color: #fff;
-          font-size: 0.9rem;
-          font-weight: 600;
-          letter-spacing: -0.01em;
+        .project-tile-text {
+          display: flex;
+          flex-direction: column;
+          gap: 0.3rem;
           opacity: 0;
-          transform: translateY(6px);
-          transition: opacity 0.3s, transform 0.3s;
-          margin: 0;
+          transform: translateY(8px);
+          transition: opacity 0.3s ease 0.05s, transform 0.3s ease 0.05s;
         }
-        .project-tile:hover .project-tile-title {
+        .project-tile:hover .project-tile-text {
           opacity: 1;
           transform: translateY(0);
+        }
+        .project-tile-category {
+          color: rgba(0,66,225,0.7);
+          font-size: 0.75rem;
+          font-weight: 500;
+          letter-spacing: 0.08em;
+          text-transform: uppercase;
+          margin: 0;
+        }
+        .project-tile-title {
+          color: #0042e1;
+          font-size: 1.5rem;
+          font-weight: 700;
+          letter-spacing: -0.02em;
+          line-height: 1.15;
+          margin: 0;
         }
       `}</style>
     </>

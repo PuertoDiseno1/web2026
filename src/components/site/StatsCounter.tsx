@@ -90,7 +90,7 @@ function AnimatedNumber({ value, suffix }: { value: string; suffix?: string }) {
         </span>
       </span>
       {suffix && (
-        <span style={{ fontSize: "0.37em", fontWeight: 900, verticalAlign: "middle", marginLeft: "0.1em" }}>
+        <span style={{ fontSize: "0.37em", fontWeight: 900, verticalAlign: "middle", marginLeft: "0.3em", letterSpacing: "0.08em" }}>
           {suffix}
         </span>
       )}

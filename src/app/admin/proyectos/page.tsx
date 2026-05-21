@@ -45,6 +45,7 @@ export default async function AdminProyectos() {
               <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.75rem", fontWeight: 600, color: "#666", letterSpacing: "0.04em", textTransform: "uppercase" }}>Portada</th>
               <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.75rem", fontWeight: 600, color: "#666", letterSpacing: "0.04em", textTransform: "uppercase" }}>Proyecto</th>
               <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.75rem", fontWeight: 600, color: "#666", letterSpacing: "0.04em", textTransform: "uppercase" }}>Categoría</th>
+              <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.75rem", fontWeight: 600, color: "#666", letterSpacing: "0.04em", textTransform: "uppercase" }}>Video portada</th>
               <th style={{ padding: "0.75rem 1.25rem", textAlign: "left", fontSize: "0.75rem", fontWeight: 600, color: "#666", letterSpacing: "0.04em", textTransform: "uppercase" }}>Estado</th>
               <th style={{ padding: "0.75rem 1.25rem" }}></th>
             </tr>
@@ -77,6 +78,13 @@ export default async function AdminProyectos() {
                   <span style={{ fontSize: "0.75rem", color: "#555", background: "#f0f0f0", padding: "0.2rem 0.6rem", borderRadius: "4px" }}>
                     {p.categories.split("\n")[0]}
                   </span>
+                </td>
+                <td style={{ padding: "1rem 1.25rem" }}>
+                  {p.coverVideo ? (
+                    <span style={{ fontSize: "0.75rem", padding: "0.2rem 0.6rem", borderRadius: "4px", background: "#e8f5e9", color: "#2e7d32", fontWeight: 600 }}>✓ Mux</span>
+                  ) : (
+                    <span style={{ fontSize: "0.75rem", color: "#bbb" }}>—</span>
+                  )}
                 </td>
                 <td style={{ padding: "1rem 1.25rem" }}>
                   <span style={{

@@ -62,7 +62,7 @@ export default async function NosotrosPage() {
           <h2 style={{ fontSize: "clamp(1.8rem, 4.5vw, 4.875rem)", fontWeight: 300, color: "#1442f0", lineHeight: 1.15, letterSpacing: "-0.02em" }}>
             ¿Cómo<br />trabajamos?
           </h2>
-          <p style={{ fontSize: "clamp(1rem, 2vw, 2.25rem)", fontWeight: 300, color: "#444", lineHeight: 1.7 }}>
+          <p style={{ fontSize: "clamp(0.9rem, 1.5vw, 1.75rem)", fontWeight: 300, color: "#444", lineHeight: 1.7 }}>
             Partimos siempre desde la estrategia: entendemos el negocio, el contexto y a las personas para las que diseñamos.
             Trabajamos con metodologías rigurosas y procesos claros que aseguran consistencia, foco y resultados.
           </p>
@@ -75,13 +75,13 @@ export default async function NosotrosPage() {
           <div className="team-grid">
             {team.map((member) => (
               <div key={member.id}>
-                <div style={{ aspectRatio: "3/4", position: "relative", overflow: "hidden", marginBottom: "0.9rem", background: "#ddd" }} className="team-card">
+                <div style={{ aspectRatio: "4/4", position: "relative", overflow: "hidden", marginBottom: "0.9rem", background: "#ddd" }} className="team-card">
                   {member.photo ? (
                     <Image
                       src={member.photo}
                       alt={member.name}
                       fill
-                      style={{ objectFit: "cover", objectPosition: "top", filter: "grayscale(100%)" }}
+                      style={{ objectFit: "cover", objectPosition: "center", filter: "grayscale(100%)" }}
                       className="team-photo"
                     />
                   ) : (
@@ -93,7 +93,7 @@ export default async function NosotrosPage() {
                     <p style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.8125rem)", fontWeight: 700, letterSpacing: "-0.01em", color: "#1442f0", marginBottom: "0.2rem" }}>
                       {member.name}
                     </p>
-                    <p style={{ fontSize: "clamp(0.8rem, 1.5vw, 1.625rem)", fontWeight: 300, color: "#777" }}>{member.role}</p>
+                    <p style={{ fontSize: "clamp(0.8rem, 1vw, 1.05rem)", fontWeight: 300, color: "#777", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{member.role}</p>
                   </div>
                   {member.linkedin && (
                     <a
