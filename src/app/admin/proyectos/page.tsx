@@ -2,6 +2,7 @@ export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { encodePath } from "@/lib/images";
 
 function firstImage(raw: unknown): string | null {
   if (!raw) return null;
@@ -59,7 +60,7 @@ export default async function AdminProyectos() {
                     const img = firstImage(p.images);
                     return img ? (
                       <div style={{ position: "relative", width: 64, height: 44, borderRadius: 4, overflow: "hidden", background: "#f0f0f0", flexShrink: 0 }}>
-                        <Image src={img} alt={p.title} fill style={{ objectFit: "cover" }} sizes="64px" />
+                        <Image src={encodePath(img)} alt={p.title} fill style={{ objectFit: "cover" }} sizes="64px" />
                       </div>
                     ) : (
                       <div style={{ width: 64, height: 44, borderRadius: 4, background: "#fce4ec", display: "flex", alignItems: "center", justifyContent: "center" }}>

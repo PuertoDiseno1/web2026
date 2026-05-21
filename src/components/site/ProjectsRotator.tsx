@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MuxVideo from "./MuxVideo";
+import { encodePath } from "@/lib/images";
 
 type Project = {
   id: string | number;
@@ -221,11 +222,11 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
                     ) : p.coverImage && isGif(p.coverImage) ? (
                       <div className="mosaic-img-layer">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={p.coverImage} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <img src={encodePath(p.coverImage)} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
                     ) : p.coverImage ? (
                       <div className="mosaic-img-layer">
-                        <Image src={p.coverImage} alt={p.title} fill style={{ objectFit: "cover" }} sizes="33vw" />
+                        <Image src={encodePath(p.coverImage!)} alt={p.title} fill style={{ objectFit: "cover" }} sizes="33vw" />
                       </div>
                     ) : null}
                   </div>

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import MuxVideo from "@/components/site/MuxVideo";
+import { encodePath } from "@/lib/images";
 
 interface Project {
   id?: string;
@@ -244,7 +245,7 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
                   // eslint-disable-next-line @next/next/no-img-element
                   <img src={data.coverImage} alt="Cover" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                 ) : (
-                  <Image src={data.coverImage} alt="Cover" fill style={{ objectFit: "cover" }} />
+                  <Image src={encodePath(data.coverImage)} alt="Cover" fill style={{ objectFit: "cover" }} />
                 )}
               </div>
             )}
@@ -306,7 +307,7 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
                     }}
                   >
                     <div style={{ aspectRatio: "1", position: "relative", borderRadius: "4px", overflow: "hidden" }}>
-                      <Image src={img} alt={`img-${i}`} fill style={{ objectFit: "cover" }} />
+                      <Image src={encodePath(img)} alt={`img-${i}`} fill style={{ objectFit: "cover" }} />
                     </div>
                     {i === 0 && (
                       <span style={{ position: "absolute", bottom: 4, left: 4, background: "#0042e1", color: "#fff", fontSize: "0.55rem", fontWeight: 700, padding: "1px 5px", borderRadius: "3px", letterSpacing: "0.03em" }}>PORTADA</span>

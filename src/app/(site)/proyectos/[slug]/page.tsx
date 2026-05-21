@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import { encodePath } from "@/lib/images";
 
 async function getProject(slug: string) {
   try {
@@ -190,7 +191,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             {images.map((img, i) => (
               <div key={i} style={{ breakInside: "avoid", marginBottom: "0.75rem", overflow: "hidden", borderRadius: "2px" }}>
                 <Image
-                  src={img}
+                  src={encodePath(img)}
                   alt={`${project.title} ${i + 1}`}
                   width={800}
                   height={800}

@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import MuxVideo from "./MuxVideo";
+import { encodePath } from "@/lib/images";
 
 interface Project {
   id: string;
@@ -108,9 +109,9 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                       {p.coverImage && (
                         p.coverImage.toLowerCase().endsWith(".gif") ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={p.coverImage} alt={p.title} style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: "cover", display: "block", minHeight: isLast ? "200px" : undefined }} />
+                          <img src={encodePath(p.coverImage)} alt={p.title} style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: "cover", display: "block", minHeight: isLast ? "200px" : undefined }} />
                         ) : (
-                          <Image src={p.coverImage} alt={p.title} width={600} height={600} sizes="(max-width: 768px) 100vw, 33vw" style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: isLast ? "cover" : undefined, display: "block", minHeight: isLast ? "200px" : undefined }} />
+                          <Image src={encodePath(p.coverImage)} alt={p.title} width={600} height={600} sizes="(max-width: 768px) 100vw, 33vw" style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: isLast ? "cover" : undefined, display: "block", minHeight: isLast ? "200px" : undefined }} />
                         )
                       )}
                       {!p.coverImage && (
