@@ -190,13 +190,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           >
             {images.map((img, i) => (
               <div key={i} style={{ breakInside: "avoid", marginBottom: "0.75rem", overflow: "hidden", borderRadius: "2px" }}>
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={encodePath(img)}
                   alt={`${project.title} ${i + 1}`}
-                  width={800}
-                  height={800}
                   style={{ width: "100%", height: "auto", display: "block" }}
-                  sizes="(max-width: 768px) 50vw, 600px"
+                  loading="lazy"
                 />
               </div>
             ))}

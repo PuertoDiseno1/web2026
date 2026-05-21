@@ -111,7 +111,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                           // eslint-disable-next-line @next/next/no-img-element
                           <img src={encodePath(p.coverImage)} alt={p.title} style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: "cover", display: "block", minHeight: isLast ? "200px" : undefined }} />
                         ) : (
-                          <Image src={encodePath(p.coverImage)} alt={p.title} width={600} height={600} sizes="(max-width: 768px) 100vw, 33vw" style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: isLast ? "cover" : undefined, display: "block", minHeight: isLast ? "200px" : undefined }} />
+                          <Image src={encodePath(p.coverImage)} alt={p.title} width={600} height={600} unoptimized sizes="(max-width: 768px) 100vw, 33vw" style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: isLast ? "cover" : undefined, display: "block", minHeight: isLast ? "200px" : undefined }} />
                         )
                       )}
                       {!p.coverImage && (

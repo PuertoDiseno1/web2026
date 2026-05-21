@@ -226,7 +226,7 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
                       </div>
                     ) : p.coverImage ? (
                       <div className="mosaic-img-layer">
-                        <Image src={encodePath(p.coverImage!)} alt={p.title} fill style={{ objectFit: "cover" }} sizes="33vw" />
+                        <Image src={encodePath(p.coverImage!)} alt={p.title} fill unoptimized style={{ objectFit: "cover" }} sizes="33vw" />
                       </div>
                     ) : null}
                   </div>

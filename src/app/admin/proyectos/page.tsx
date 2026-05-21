@@ -60,7 +60,7 @@ export default async function AdminProyectos() {
                     const img = firstImage(p.images);
                     return img ? (
                       <div style={{ position: "relative", width: 64, height: 44, borderRadius: 4, overflow: "hidden", background: "#f0f0f0", flexShrink: 0 }}>
-                        <Image src={encodePath(img)} alt={p.title} fill style={{ objectFit: "cover" }} sizes="64px" />
+                        <Image src={encodePath(img)} alt={p.title} fill unoptimized style={{ objectFit: "cover" }} sizes="64px" />
                       </div>
                     ) : (
                       <div style={{ width: 64, height: 44, borderRadius: 4, background: "#fce4ec", display: "flex", alignItems: "center", justifyContent: "center" }}>
