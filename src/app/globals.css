@@ -133,6 +133,11 @@
   padding: 0;
 }
 
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -295,6 +300,15 @@ img {
 }
 @media (max-width: 900px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 500px) { .team-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; } }
+
+/* ── HOME: PROJECTS MOSAIC ── */
+@media (max-width: 900px) {
+  .mosaic-col { min-width: 0 !important; }
+  .mosaic-cell-lg { height: 38vw !important; }
+  .mosaic-cell-sm { height: 31vw !important; }
+  .mosaic-title { font-size: 0.65rem !important; }
+  .mosaic-cat { display: none !important; }
+}
 
 /* ── SERVICIOS: SERVICE ROW ── */
 .service-row {

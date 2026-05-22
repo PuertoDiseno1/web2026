@@ -185,25 +185,22 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
           transition: letter-spacing 0.35s ease;
         }
         .mosaic-cell:hover .mosaic-cat { opacity: 1 !important; transform: translateY(0) !important; }
-        /* Mobile: mantener 3 columnas con proporciones, escalar ~50% */
-        @media (max-width: 640px) {
-          .mosaic-cell-lg { height: 305px !important; }
-          .mosaic-cell-sm { height: 263px !important; }
-          .mosaic-title { font-size: 0.62rem !important; }
-          .mosaic-cat { display: none; }
-        }
-        @media (min-width: 641px) and (max-width: 900px) {
-          .mosaic-cell-lg { height: 370px !important; }
-          .mosaic-cell-sm { height: 312px !important; }
+        /* Mobile / tablet: escalar alturas proporcionalmente con vw */
+        @media (max-width: 900px) {
+          .mosaic-col { min-width: 0; }
+          .mosaic-cell-lg { height: 38vw !important; }
+          .mosaic-cell-sm { height: 31vw !important; }
+          .mosaic-title { font-size: 0.65rem !important; }
+          .mosaic-cat { display: none !important; }
         }
       `}</style>
 
-      <div style={{ display: "flex", gap: "4px" }}
+      <div style={{ display: "flex", gap: "4px", width: "100%" }}
         onMouseEnter={() => { pausedRef.current = true; }}
         onMouseLeave={() => { pausedRef.current = false; }}
       >
         {COL_INDICES.map((colSlots, ci) => (
-          <div key={ci} className={`mosaic-col mosaic-col-${ci}`} style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1 }}>
+          <div key={ci} className={`mosaic-col mosaic-col-${ci}`} style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1, minWidth: 0 }}>
             {colSlots.map((slotIdx, ri) => {
               const slot = slots[slotIdx];
               if (!slot) return null;
@@ -239,7 +236,7 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
                 <Link
                   key={slotIdx}
                   href={`/proyectos/${current.slug}`}
-                  className={`mosaic-cell ${h >= 300 ? "mosaic-cell-lg" : "mosaic-cell-sm"}`}
+                  className={`mosaic-cell ${h >= 450 ? "mosaic-cell-lg" : "mosaic-cell-sm"}`}
                   style={{ height: h, background: bg, "--cell-bg": bg } as React.CSSProperties}
                 >
                   {/* Current layer (bottom) */}

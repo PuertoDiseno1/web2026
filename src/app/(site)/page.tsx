@@ -186,7 +186,7 @@ export default async function HomePage() {
       </section>
 
       {/* ═══ PROJECTS GRID ═══ */}
-      <section className="sp" style={{ background: "#fff", padding: "0 2.5rem 4rem" }}>
+      <section className="sp home-projects-section" style={{ background: "#fff", padding: "0 2.5rem 4rem" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <ProjectsRotator projects={projects} />
 
