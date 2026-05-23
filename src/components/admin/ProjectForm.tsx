@@ -16,6 +16,7 @@ interface Project {
   categories: string;
   videoEmbed: string;
   coverImage: string;
+  homeImage: string;
   coverVideo: string;
   images: string;
   featured: boolean;
@@ -24,7 +25,7 @@ interface Project {
 
 const defaultProject: Project = {
   order: 0, slug: "", title: "", subtitle: "", description: "",
-  services: "", categories: "", videoEmbed: "", coverImage: "", coverVideo: "", images: "[]",
+  services: "", categories: "", videoEmbed: "", coverImage: "", homeImage: "", coverVideo: "", images: "[]",
   featured: false, published: true,
 };
 
@@ -34,6 +35,7 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
   const [saving, setSaving] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [uploadingCover, setUploadingCover] = useState(false);
+  const [uploadingHomeImage, setUploadingHomeImage] = useState(false);
   const [uploadingImages, setUploadingImages] = useState(false);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -71,6 +73,13 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
     if (!file) return;
     setUploadingCover(true);
     await uploadFile(file, (url) => { syncCoverToImages(url); setUploadingCover(false); });
+  }
+
+  async function handleHomeImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setUploadingHomeImage(true);
+    await uploadFile(file, (url) => { update("homeImage", url); setUploadingHomeImage(false); });
   }
 
   async function handleImagesUpload(e: React.ChangeEvent<HTMLInputElement>) {
@@ -263,6 +272,36 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
           </div>
 
           {/* Cover video */}
+          <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid #e8e8e8" }}>
+            <h3 style={{ fontSize: "0.875rem", fontWeight: 700, marginBottom: "0.35rem", color: "#0a0a0a" }}>Portada Home</h3>
+            <p style={{ fontSize: "0.75rem", color: "#888", marginBottom: "0.75rem" }}>Imagen que aparece en el mosaico del home. Si no se define, se usa la portada del proyecto.</p>
+            {data.homeImage && (
+              <div style={{ aspectRatio: "4/3", position: "relative", marginBottom: "0.75rem", borderRadius: "4px", overflow: "hidden" }}>
+                {data.homeImage.toLowerCase().endsWith(".gif") ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img src={data.homeImage} alt="Home" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                ) : (
+                  <Image src={encodePath(data.homeImage)} alt="Home" fill unoptimized style={{ objectFit: "cover" }} />
+                )}
+              </div>
+            )}
+            <input
+              style={{ fontSize: "0.8rem", width: "100%", padding: "0.4rem 0.6rem", border: "1px solid #e0e0e0", borderRadius: "4px", marginBottom: "0.25rem" }}
+              type="text"
+              value={data.homeImage}
+              onChange={(e) => update("homeImage", e.target.value)}
+              placeholder="URL de imagen"
+            />
+            {data.homeImage && (
+              <button type="button" onClick={() => update("homeImage", "")} style={{ fontSize: "0.75rem", color: "#c00", background: "none", border: "none", cursor: "pointer", padding: "0.2rem 0", marginBottom: "0.25rem" }}>✕ Quitar</button>
+            )}
+            <label style={{ display: "block", marginTop: "0.5rem", padding: "0.5rem 0.75rem", border: "1px dashed #ccc", borderRadius: "4px", textAlign: "center", cursor: "pointer", fontSize: "0.8rem", color: "#666" }}>
+              {uploadingHomeImage ? "Subiendo..." : "Subir imagen"}
+              <input type="file" accept="image/*" style={{ display: "none" }} onChange={handleHomeImageUpload} />
+            </label>
+          </div>
+
+          {/* Cover video - original */}
           <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid #e8e8e8" }}>
             <h3 style={{ fontSize: "0.875rem", fontWeight: 700, marginBottom: "0.35rem", color: "#0a0a0a" }}>Portada de video</h3>
             <p style={{ fontSize: "0.75rem", color: "#888", marginBottom: "0.75rem" }}>Pega el Playback ID de Mux. Tiene prioridad sobre la imagen.</p>

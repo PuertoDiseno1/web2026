@@ -35,7 +35,7 @@ export default function AdminNav() {
       }}
     >
       <div style={{ marginBottom: "3rem" }}>
-        <Image src="/logo-footer.png" alt="Puerto Diseño" width={130} height={56} style={{ width: "auto", height: 36, maxWidth: 130, display: "block" }} />
+        <Image src="/logo-footer1.png" alt="Puerto Diseño" width={180} height={87} style={{ width: "auto", height: 50, maxWidth: 180, display: "block" }} />
         <p style={{ fontSize: "0.75rem", color: "rgba(245,245,240,0.35)", marginTop: "0.5rem" }}>Admin</p>
       </div>
 

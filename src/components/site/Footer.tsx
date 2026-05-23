@@ -11,7 +11,7 @@ export default async function Footer() {
   const s = await getSettings();
 
   return (
-    <footer style={{ background: "#00285f", padding: "3.5rem 2.5rem 2rem" }}>
+    <footer id="site-footer" style={{ background: "#00285f", padding: "3.5rem 2.5rem 2rem" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
         {/* Top row */}
@@ -20,11 +20,11 @@ export default async function Footer() {
           {/* Logo */}
           <div>
             <Image
-              src="/logo-footer.png"
+              src="/logo-footer1.png"
               alt="Puerto Diseño"
-              width={140}
-              height={60}
-              style={{ width: "auto", height: "auto", maxWidth: 140 }}
+              width={180}
+              height={87}
+              style={{ width: "auto", height: "auto", maxWidth: 180 }}
             />
           </div>
 
@@ -44,11 +44,12 @@ export default async function Footer() {
         <div className="footer-bottom" style={{ paddingTop: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
 
           {/* Address */}
-          <p className="footer-address" style={{ fontSize: "clamp(0.75rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
+          <div className="footer-address" style={{ fontSize: "clamp(0.75rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
+            <span style={{ display: "block" }}>+562 2570 1400</span>
             {(s.address ?? "Av. del Valle Nte. 945,\nHuechuraba. Santiago, Chile").split("\n").map((line, i) => (
               <span key={i} style={{ display: "block" }}>{line}</span>
             ))}
-          </p>
+          </div>
 
           {/* Social icons + copyright */}
           <div className="footer-social" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>

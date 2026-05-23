@@ -61,11 +61,11 @@ export default function Navbar() {
           style={{ position: "relative", zIndex: 201, display: "flex", alignItems: "center" }}
         >
           <Image
-            src={(!open && onLight) ? "/logo-blue.png" : "/logo-footer.png"}
+            src={(!open && onLight) ? "/logo-blue.png" : "/logo-header.png"}
             alt="Puerto Diseño"
             width={120}
-            height={50}
-            style={{ width: "auto", height: 36 }}
+            height={53}
+            style={{ width: 120, height: "auto" }}
             priority
           />
         </Link>

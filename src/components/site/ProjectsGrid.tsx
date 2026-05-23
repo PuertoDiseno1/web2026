@@ -87,39 +87,41 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
         </div>
       </div>
 
-      {/* MASONRY GRID */}
+      {/* MOSAIC GRID */}
       {(() => {
+        // Same height pattern as home mosaic, repeating per column
+        const COL_HEIGHTS = [
+          [480, 395, 395],
+          [395, 395, 480],
+          [480, 395, 395],
+        ];
         const cols: typeof filtered[] = [[], [], []];
         filtered.forEach((p, i) => cols[i % 3].push(p));
         return (
-          <div style={{ display: "flex", gap: "12px", alignItems: "stretch" }} className="projects-masonry">
+          <div style={{ display: "flex", gap: "12px" }} className="projects-masonry">
             {cols.map((col, ci) => (
               <div key={ci} style={{ flex: 1, display: "flex", flexDirection: "column", gap: "12px" }}>
                 {col.map((p, pi) => {
-                  const isLast = pi === col.length - 1;
+                  const h = COL_HEIGHTS[ci][pi % COL_HEIGHTS[ci].length];
                   return (
-                  <Link
-                    key={p.id}
-                    href={`/proyectos/${p.slug}`}
-                    style={{ display: "block", position: "relative", overflow: "hidden", ...(isLast ? { flex: 1 } : {}) }}
-                    className="project-tile"
-                  >
-                    <div style={{ position: "relative", width: "100%", height: isLast ? "100%" : "auto" }}>
-                      {/* Imagen base siempre visible */}
+                    <Link
+                      key={p.id}
+                      href={`/proyectos/${p.slug}`}
+                      style={{ display: "block", position: "relative", overflow: "hidden", height: h, flexShrink: 0, background: "#111" }}
+                      className="project-tile"
+                    >
+                      {/* Image */}
                       {p.coverImage && (
                         p.coverImage.toLowerCase().endsWith(".gif") ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={encodePath(p.coverImage)} alt={p.title} style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: "cover", display: "block", minHeight: isLast ? "200px" : undefined }} />
+                          <img src={encodePath(p.coverImage)} alt={p.title} style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                         ) : (
-                          <Image src={encodePath(p.coverImage)} alt={p.title} width={600} height={600} unoptimized sizes="(max-width: 768px) 100vw, 33vw" style={{ width: "100%", height: isLast ? "100%" : "auto", objectFit: isLast ? "cover" : undefined, display: "block", minHeight: isLast ? "200px" : undefined }} />
+                          <Image src={encodePath(p.coverImage)} alt={p.title} fill unoptimized sizes="33vw" style={{ objectFit: "cover" }} />
                         )
                       )}
-                      {!p.coverImage && (
-                        <div style={{ aspectRatio: isLast ? undefined : "1/1", height: isLast ? "100%" : undefined, background: "#e8e8e8", minHeight: isLast ? "200px" : undefined }} />
-                      )}
-                      {/* Video Mux con HLS nativo — funciona en todos los browsers */}
+                      {/* Video */}
                       {p.coverVideo && (
-                        <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%", overflow: "hidden" }}>
+                        <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
                           <MuxVideo playbackId={getMuxPlaybackId(p.coverVideo)} />
                         </div>
                       )}
@@ -130,8 +132,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                           <p className="project-tile-title">{p.title}</p>
                         </div>
                       </div>
-                    </div>
-                  </Link>
+                    </Link>
                   );
                 })}
               </div>
@@ -142,13 +143,13 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
 
       <style>{`
         .projects-masonry {
-          align-items: stretch;
+          padding: 12px 2.5rem 4rem;
         }
         @media (max-width: 900px) {
-          .projects-masonry { flex-wrap: wrap; }
-          .projects-masonry > div { flex: 1 1 45%; }
+          .projects-masonry { padding: 12px 1rem 3rem; }
         }
         @media (max-width: 550px) {
+          .projects-masonry { flex-direction: column; }
           .projects-masonry > div { flex: 1 1 100%; }
         }
         .project-tile-overlay {

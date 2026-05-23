@@ -12,6 +12,7 @@ type Project = {
   title: string;
   categories: string | null;
   coverImage: string | null;
+  homeImage: string | null;
   coverVideo: string | null;
 };
 
@@ -60,7 +61,7 @@ function shuffle<T>(arr: T[]): T[] {
 export default function ProjectsRotator({ projects }: { projects: Project[] }) {
   const [slots, setSlots] = useState<SlotState[]>([]);
   const slotsRef = useRef<SlotState[]>([]);
-  const projectsRef = useRef(projects);
+  const projectsRef = useRef(projects.filter((p) => !!p.homeImage));
   const pausedRef = useRef(false);
 
   // Init 9 random slots
@@ -195,12 +196,12 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
         }
       `}</style>
 
-      <div style={{ display: "flex", gap: "4px", width: "100%" }}
+      <div style={{ display: "flex", gap: "12px", width: "100%" }}
         onMouseEnter={() => { pausedRef.current = true; }}
         onMouseLeave={() => { pausedRef.current = false; }}
       >
         {COL_INDICES.map((colSlots, ci) => (
-          <div key={ci} className={`mosaic-col mosaic-col-${ci}`} style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1, minWidth: 0 }}>
+          <div key={ci} className={`mosaic-col mosaic-col-${ci}`} style={{ display: "flex", flexDirection: "column", gap: "12px", flex: 1, minWidth: 0 }}>
             {colSlots.map((slotIdx, ri) => {
               const slot = slots[slotIdx];
               if (!slot) return null;
@@ -212,25 +213,21 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
               const renderLayer = (p: Project, extra?: React.CSSProperties) => {
                 return (
                   <div style={{ position: "absolute", inset: 0, ...extra }}>
-                    {p.coverVideo ? (
-                      <div className="mosaic-img-layer">
-                        <MuxVideo playbackId={getMuxPlaybackId(p.coverVideo)!} />
-                      </div>
-                    ) : p.coverImage && isGif(p.coverImage) ? (
+                    {p.homeImage && isGif(p.homeImage) ? (
                       <div className="mosaic-img-layer">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={encodePath(p.coverImage)} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                        <img src={encodePath(p.homeImage)} alt={p.title} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
                       </div>
-                    ) : p.coverImage ? (
+                    ) : p.homeImage ? (
                       <div className="mosaic-img-layer">
-                        <Image src={encodePath(p.coverImage!)} alt={p.title} fill unoptimized style={{ objectFit: "cover" }} sizes="33vw" />
+                        <Image src={encodePath(p.homeImage)} alt={p.title} fill unoptimized style={{ objectFit: "cover" }} sizes="33vw" />
                       </div>
                     ) : null}
                   </div>
                 );
               };
 
-              const hasImg = !!(current.coverVideo || current.coverImage);
+              const hasImg = !!(current.homeImage);
 
               return (
                 <Link

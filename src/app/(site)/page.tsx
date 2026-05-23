@@ -138,9 +138,11 @@ export default async function HomePage() {
                   paddingRight: i < arr.length - 1 ? "2.5rem" : "0",
                   borderRight: "none",
                   marginLeft: i > 0 ? "2.5rem" : "0",
+                  display: "flex",
+                  flexDirection: "column",
                 }}
               >
-                <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "0 0.6rem", alignItems: "start" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "auto 1fr", gap: "0 0.6rem", alignItems: "stretch", flex: 1 }}>
                   <span
                     style={{
                       fontSize: "1.5rem",
@@ -168,7 +170,7 @@ export default async function HomePage() {
                     >
                       {sv.title}
                     </h2>
-                    <p style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)", fontWeight: 300, color: "#666", lineHeight: 1.6, margin: "0 0 1.25rem", flex: 1 }}>
+                    <p style={{ fontSize: "clamp(0.85rem, 1vw, 1rem)", fontWeight: 300, color: "#111", lineHeight: 1.6, margin: "0 0 1.25rem", flex: 1 }}>
                       {sv.desc}
                     </p>
                     <Link href="/servicios" style={{ display: "inline-flex", alignItems: "center", gap: "0.35rem", fontSize: "clamp(0.8rem, 0.95vw, 0.95rem)", fontWeight: 400, color: "#1442f0", textDecoration: "none", letterSpacing: "0.01em" }}>
@@ -292,18 +294,18 @@ export default async function HomePage() {
                     <mark
                       style={{
                         background: "linear-gradient(150deg, transparent 9%, #cbfd00 9%)",
-                        color: "#00285f",
-                        padding: "0 0.2em",
+                        color: "#1442f0",
+                        padding: "0 0.15em",
                         borderRadius: 0,
                         fontStyle: "normal",
-                        display: "inline-block",
+                        display: "inline",
                       }}
                     >
                       {item.highlight}
                     </mark>
                   </span>
                 </h3>
-                <p style={{ fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)", fontWeight: 300, color: "#555", lineHeight: 1.6 }}>
+                <p style={{ fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)", fontWeight: 300, color: "#111", lineHeight: 1.6 }}>
                   {item.desc}
                 </p>
                 </div>

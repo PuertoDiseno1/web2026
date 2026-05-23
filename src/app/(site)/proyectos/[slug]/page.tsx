@@ -220,7 +220,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             href={`/proyectos/${prev.slug}`}
             style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "1.25rem", color: "#1442f0", fontWeight: 500, textDecoration: "none" }}
           >
-            <span style={{ fontSize: "1.6rem" }}>‹</span> Anterior
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#1442f0" strokeWidth="0.6" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 18 9 12 15 6"/>
+              </svg>
+            </span>
+            <span style={{ display: "flex", alignItems: "center" }}>Anterior</span>
           </Link>
         ) : (
           <span />
@@ -230,7 +235,12 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
             href={`/proyectos/${next.slug}`}
             style={{ display: "flex", alignItems: "center", gap: "0.5rem", fontSize: "1.25rem", color: "#1442f0", fontWeight: 500, textDecoration: "none" }}
           >
-            Siguiente <span style={{ fontSize: "1.6rem" }}>›</span>
+            <span style={{ display: "flex", alignItems: "center" }}>Siguiente</span>
+            <span style={{ display: "flex", alignItems: "center" }}>
+              <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="#1442f0" strokeWidth="0.6" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 18 15 12 9 6"/>
+              </svg>
+            </span>
           </Link>
         ) : (
           <span />

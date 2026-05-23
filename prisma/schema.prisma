@@ -27,6 +27,7 @@ model Project {
   categories  String
   videoEmbed  String?
   coverImage  String?
+  homeImage   String?
   images      String   @default("[]")
   featured    Boolean  @default(false)
   published   Boolean  @default(true)
