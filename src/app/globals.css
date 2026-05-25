@@ -258,7 +258,11 @@ img {
     border-bottom: 1px solid #e0e0e0;
     margin-left: 0 !important;
     padding-right: 0 !important;
+    padding-top: 1.5rem !important;
+    padding-bottom: 1.5rem !important;
   }
+  .home-services-section { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+  .home-services-h1 { margin-bottom: 2rem !important; font-size: clamp(1.3rem, 5vw, 1.8rem) !important; }
 }
 
 /* ── HOME: STATS GRID ── */
@@ -278,7 +282,10 @@ img {
 }
 @media (max-width: 768px) {
   .home-why-grid { grid-template-columns: 1fr; }
-  .home-why-grid > div { border-left: none !important; border-top: 3px solid #1442f0; padding: 2rem 0 !important; }
+  .home-why-grid > div { border-left: none !important; border-top: 3px solid #1442f0; padding: 1.5rem 0 !important; }
+  .why-inner { border-left: none !important; padding-left: 0 !important; }
+  .home-why-desc { font-size: 1.05rem !important; line-height: 1.55 !important; }
+  .home-why-title { font-size: 1.35rem !important; }
 }
 
 /* ── NOSOTROS: COMO TRABAJAMOS ── */
@@ -299,7 +306,10 @@ img {
   gap: 2.5rem 2rem;
 }
 @media (max-width: 900px) { .team-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 500px) { .team-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; } }
+@media (max-width: 500px) {
+  .team-grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem 1rem; }
+  .team-card { aspect-ratio: 2/3 !important; }
+}
 
 /* ── HOME: PROJECTS MOSAIC ── */
 @media (max-width: 900px) {
@@ -335,7 +345,7 @@ img {
   .project-info-layout { grid-template-columns: 1fr !important; gap: 2rem !important; }
   .project-gallery { column-count: 2 !important; }
 }
-@media (max-width: 400px) {
+@media (max-width: 600px) {
   .project-gallery { column-count: 1 !important; }
 }
 

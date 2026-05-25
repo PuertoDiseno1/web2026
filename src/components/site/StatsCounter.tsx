@@ -113,12 +113,20 @@ export default function StatsCounter({ stats }: { stats: Stat[] }) {
           }
           .stats-cell {
             border-left: none !important;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            padding: 2rem 1.5rem !important;
+            border-top: 1px solid rgba(255,255,255,0.2) !important;
+            padding: 1.5rem 0 !important;
+            flex-direction: row !important;
+            align-items: center !important;
+            text-align: left !important;
+            gap: 1.5rem;
           }
           .stats-cell:first-child {
-            border-top: none;
+            border-top: none !important;
+            padding-top: 0.5rem !important;
           }
+          .stats-divider { display: none !important; }
+          .stats-label { flex: 1; font-size: 1rem !important; }
+          .stats-number { min-width: 6rem; }
         }
       `}</style>
       <div className="stats-grid">
@@ -135,15 +143,17 @@ export default function StatsCounter({ stats }: { stats: Stat[] }) {
               borderLeft: i > 0 ? "1px solid rgba(255,255,255,0.2)" : "none",
             }}
           >
-            <AnimatedNumber value={stat.value} suffix={stat.suffix} />
-            <div style={{
+            <div className="stats-number">
+              <AnimatedNumber value={stat.value} suffix={stat.suffix} />
+            </div>
+            <div className="stats-divider" style={{
               width: "2.5rem",
               height: "1px",
               background: "#c8f25a",
               margin: "1rem auto",
               opacity: 0.7,
             }} />
-            <p style={{
+            <p className="stats-label" style={{
               fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)",
               fontWeight: 300,
               color: "rgba(255,255,255,0.8)",

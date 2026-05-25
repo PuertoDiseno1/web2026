@@ -31,7 +31,7 @@ export default async function Footer() {
           {/* Nav links */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
             {[["Nosotros", "/nosotros"], ["Servicios", "/servicios"], ["Proyectos", "/proyectos"], ["Blog", "/blog"]].map(([label, href]) => (
-              <Link key={href} href={href} style={{ fontSize: "clamp(0.85rem, 1.2vw, 1.625rem)", fontWeight: 100, color: "rgba(255,255,255,0.85)", lineHeight: 1.8 }}>
+              <Link key={href} href={href} style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.625rem)", fontWeight: 300, color: "rgba(255,255,255,0.85)", lineHeight: 1.8 }}>
                 {label}
               </Link>
             ))}
@@ -44,7 +44,7 @@ export default async function Footer() {
         <div className="footer-bottom" style={{ paddingTop: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
 
           {/* Address */}
-          <div className="footer-address" style={{ fontSize: "clamp(0.75rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
+          <div className="footer-address" style={{ fontSize: "clamp(0.85rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
             <span style={{ display: "block" }}>+562 2570 1400</span>
             {(s.address ?? "Av. del Valle Nte. 945,\nHuechuraba. Santiago, Chile").split("\n").map((line, i) => (
               <span key={i} style={{ display: "block" }}>{line}</span>

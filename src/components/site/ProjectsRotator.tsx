@@ -194,9 +194,18 @@ export default function ProjectsRotator({ projects }: { projects: Project[] }) {
           .mosaic-title { font-size: 0.65rem !important; }
           .mosaic-cat { display: none !important; }
         }
+        /* Móvil: 2 columnas — ocultar columna central */
+        @media (max-width: 600px) {
+          .mosaic-col-1 { display: none !important; }
+          .mosaic-cell-lg { height: 48vw !important; }
+          .mosaic-cell-sm { height: 40vw !important; }
+          .mosaic-title { font-size: 0.75rem !important; }
+          .mosaic-container { gap: 5px !important; }
+          .mosaic-col { gap: 5px !important; }
+        }
       `}</style>
 
-      <div style={{ display: "flex", gap: "12px", width: "100%" }}
+      <div className="mosaic-container" style={{ display: "flex", gap: "12px", width: "100%" }}
         onMouseEnter={() => { pausedRef.current = true; }}
         onMouseLeave={() => { pausedRef.current = false; }}
       >

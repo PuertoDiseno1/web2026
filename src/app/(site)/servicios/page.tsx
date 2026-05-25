@@ -85,7 +85,7 @@ export default async function ServiciosPage() {
         <Image src={heroImage} alt="Servicios" fill sizes="100vw" style={{ objectFit: "cover", objectPosition: "center" }} priority />
         <div style={{ position: "absolute", inset: 0, background: "rgba(10,10,10,0.45)" }} />
         <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <h1 style={{ fontSize: "clamp(3rem, 8vw, 6.25rem)", fontWeight: 100, color: "#fff", letterSpacing: "-0.02em" }}>
+          <h1 style={{ fontSize: "clamp(3rem, 8vw, 6.25rem)", fontWeight: 700, color: "#fff", letterSpacing: "-0.02em" }}>
             Servicios
           </h1>
         </div>
@@ -133,7 +133,7 @@ export default async function ServiciosPage() {
           <div style={{ padding: "1rem 0" }}>
             <h2 style={{
               fontSize: "clamp(1.4rem, 3.5vw, 4.1875rem)",
-              fontWeight: 200,
+              fontWeight: 700,
               letterSpacing: "-0.02em",
               lineHeight: 1.1,
               marginBottom: "1.25rem",

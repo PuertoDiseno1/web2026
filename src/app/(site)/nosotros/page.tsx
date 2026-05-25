@@ -81,7 +81,7 @@ export default async function NosotrosPage() {
                       src={member.photo}
                       alt={member.name}
                       fill
-                      style={{ objectFit: "cover", objectPosition: "center", filter: "grayscale(100%)" }}
+                      style={{ objectFit: "cover", objectPosition: "top center", filter: "grayscale(100%)" }}
                       className="team-photo"
                     />
                   ) : (

@@ -78,12 +78,13 @@ export default async function HomePage() {
       </section>
 
       {/* ═══ SERVICES ═══ */}
-      <section className="sp spv" style={{ background: "#fff", padding: "6rem 2.5rem 5rem" }}>
+      <section className="sp home-services-section" style={{ background: "#fff", padding: "4rem 2.5rem 4rem" }}>
         <div style={{ maxWidth: 1200, margin: "0 auto" }}>
           <h1
+            className="home-services-h1"
             style={{
               fontSize: "clamp(1.5rem, 3.2vw, 3rem)",
-              fontWeight: 300,
+              fontWeight: 400,
               color: "#1442f0",
               letterSpacing: "-0.03em",
               lineHeight: 1.2,
@@ -159,13 +160,12 @@ export default async function HomePage() {
                     <h2
                       style={{
                         fontSize: "clamp(1.5rem, 2.2vw, 2.5rem)",
-                        fontWeight: 100,
+                        fontWeight: 300,
                         color: "#111",
                         letterSpacing: "-0.02em",
                         lineHeight: 1.15,
                         margin: "0 0 0.85rem",
                         whiteSpace: "pre-line",
-                        minHeight: "5.5rem",
                       }}
                     >
                       {sv.title}
@@ -220,7 +220,7 @@ export default async function HomePage() {
           <h2
             style={{
               fontSize: "clamp(1.4rem, 3.5vw, 4.1875rem)",
-              fontWeight: 100,
+              fontWeight: 300,
               color: "#cbfd00",
               textAlign: "center",
               letterSpacing: "-0.02em",
@@ -277,8 +277,9 @@ export default async function HomePage() {
                 key={item.highlight}
                 style={{ padding: "2.5rem" }}
               >
-                <div style={{ borderLeft: "1px solid #1442f0", paddingLeft: "1.5rem" }}>
+                <div className="why-inner" style={{ borderLeft: "1px solid #1442f0", paddingLeft: "1.5rem" }}>
                 <h3
+                  className="home-why-title"
                   style={{
                     fontSize: "clamp(1.2rem, 2.2vw, 2.9375rem)",
                     fontWeight: 300,
@@ -305,7 +306,7 @@ export default async function HomePage() {
                     </mark>
                   </span>
                 </h3>
-                <p style={{ fontSize: "clamp(0.85rem, 1.3vw, 1.625rem)", fontWeight: 300, color: "#111", lineHeight: 1.6 }}>
+                <p className="home-why-desc" style={{ fontSize: "clamp(0.9rem, 1.3vw, 1.625rem)", fontWeight: 300, color: "#111", lineHeight: 1.6 }}>
                   {item.desc}
                 </p>
                 </div>
