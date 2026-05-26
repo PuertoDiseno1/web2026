@@ -69,8 +69,8 @@ export default function ClientsCarousel({ logos }: ClientsCarouselProps) {
             }}
           >
             <Image
-              src={`/clientes/${logo}`}
-              alt={logo.replace(/\.[^.]+$/, "")}
+              src={logo}
+              alt={logo.split("/").pop()?.replace(/\.[^.]+$/, "") ?? ""}
               width={150}
               height={65}
               style={{

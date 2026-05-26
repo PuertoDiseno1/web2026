@@ -22,8 +22,8 @@ const defaultServices = [
       "Estrategia de diseño",
     ],
     defaultImages: [
-      "/servicios/Estrategia/img1.jpg",
-      "/servicios/Estrategia/img2.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Estrategia/img1.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Estrategia/img2.jpg",
     ],
     imageRight: true,
   },
@@ -40,8 +40,8 @@ const defaultServices = [
       "Brandbook",
     ],
     defaultImages: [
-      "/servicios/Gráfico/img1.jpg",
-      "/servicios/Gráfico/img2.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Grafico/img1.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Grafico/img2.jpg",
     ],
     imageRight: false,
   },
@@ -58,8 +58,8 @@ const defaultServices = [
       "Arquitectura interior",
     ],
     defaultImages: [
-      "/servicios/Industrial/img1.jpg",
-      "/servicios/Industrial/img2.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Industrial/img1.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Industrial/img2.jpg",
     ],
     imageRight: true,
   },
