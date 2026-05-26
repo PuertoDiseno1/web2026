@@ -57,8 +57,10 @@ export default async function HomePage() {
   const { projects, s, logos, featured } = await getData();
   const featuredImages = parseImages(featured?.images as string);
   const heroVideo = s.hero_video ?? null;
+  const heroVideoMobile = s.hero_video_mobile ?? null;
   // Extract Mux playback ID from URL like https://player.mux.com/XXXXX
   const muxId = heroVideo ? heroVideo.replace(/^https?:\/\/player\.mux\.com\//, "").split("?")[0] : null;
+  const muxIdMobile = heroVideoMobile ? heroVideoMobile.replace(/^https?:\/\/player\.mux\.com\//, "").split("?")[0] : null;
 
   return (
     <>
@@ -75,7 +77,7 @@ export default async function HomePage() {
         }}
       >
         {/* Background video (Mux HLS) */}
-        {muxId && <HeroVideo muxId={muxId} />}
+        {muxId && <HeroVideo muxId={muxId} muxIdMobile={muxIdMobile} />}
 
         {/* Background image if no video */}
         {!muxId && featuredImages[0] && (
@@ -145,7 +147,7 @@ export default async function HomePage() {
               {
                 num: "03",
                 title: "Diseño\nindustrial",
-                desc: "Diseñamos espacios y experiencias coherentes que conectan, marcan, espacios y personas.",
+                desc: "Diseñamos espacios y experiencias coherentes que conectan marcas, espacios y personas.",
               },
             ].map((sv, i, arr) => (
               <div
@@ -291,9 +293,9 @@ export default async function HomePage() {
             ].map((item, i) => (
               <div
                 key={item.highlight}
-                style={{ padding: "2.5rem" }}
+                style={{ padding: "2.5rem", display: "flex" }}
               >
-                <div className="why-inner" style={{ borderLeft: "1px solid #1442f0", paddingLeft: "1.5rem" }}>
+                <div className="why-inner" style={{ borderLeft: "1px solid #1442f0", paddingLeft: "1.5rem", flex: 1 }}>
                 <h3
                   className="home-why-title"
                   style={{

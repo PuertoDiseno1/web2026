@@ -24,6 +24,7 @@ const defaultServices = [
     defaultImages: [
       "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Estrategia/img1.jpg",
       "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Estrategia/img2.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Estrategia/img3.jpg",
     ],
     imageRight: true,
   },
@@ -42,6 +43,7 @@ const defaultServices = [
     defaultImages: [
       "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Grafico/img1.jpg",
       "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Grafico/img2.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Grafico/img3.jpg",
     ],
     imageRight: false,
   },
@@ -60,6 +62,7 @@ const defaultServices = [
     defaultImages: [
       "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Industrial/img1.jpg",
       "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Industrial/img2.jpg",
+      "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev/servicios/Industrial/img3.jpg",
     ],
     imageRight: true,
   },

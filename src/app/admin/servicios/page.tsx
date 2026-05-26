@@ -10,10 +10,10 @@ const SERVICES = [
 ];
 
 const R2 = "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev";
-const DEFAULT_IMAGES: Record<string, [string, string]> = {
-  estrategia: [`${R2}/servicios/Estrategia/img1.jpg`, `${R2}/servicios/Estrategia/img2.jpg`],
-  branding: [`${R2}/servicios/Grafico/img1.jpg`, `${R2}/servicios/Grafico/img2.jpg`],
-  industrial: [`${R2}/servicios/Industrial/img1.jpg`, `${R2}/servicios/Industrial/img2.jpg`],
+const DEFAULT_IMAGES: Record<string, [string, string, string]> = {
+  estrategia: [`${R2}/servicios/Estrategia/img1.jpg`, `${R2}/servicios/Estrategia/img2.jpg`, `${R2}/servicios/Estrategia/img3.jpg`],
+  branding: [`${R2}/servicios/Grafico/img1.jpg`, `${R2}/servicios/Grafico/img2.jpg`, `${R2}/servicios/Grafico/img3.jpg`],
+  industrial: [`${R2}/servicios/Industrial/img1.jpg`, `${R2}/servicios/Industrial/img2.jpg`, `${R2}/servicios/Industrial/img3.jpg`],
 };
 
 const DEFAULT_TEXT: Record<string, { title: string; desc: string; items: string }> = {
@@ -38,9 +38,9 @@ type ServiceText = { title: string; desc: string; items: string };
 
 type ContentState = {
   heroImage: string;
-  estrategiaImages: [string, string];
-  brandingImages: [string, string];
-  industrialImages: [string, string];
+  estrategiaImages: [string, string, string];
+  brandingImages: [string, string, string];
+  industrialImages: [string, string, string];
   estrategiaText: ServiceText;
   brandingText: ServiceText;
   industrialText: ServiceText;
@@ -124,7 +124,7 @@ export default function ServiciosAdmin() {
 
   async function handleServiceImageUpload(
     serviceId: string,
-    idx: 0 | 1,
+    idx: 0 | 1 | 2,
     e: React.ChangeEvent<HTMLInputElement>
   ) {
     const file = e.target.files?.[0];
@@ -135,7 +135,7 @@ export default function ServiciosAdmin() {
     if (!url) return;
     const field = `${serviceId}Images` as keyof ContentState;
     setContent((prev) => {
-      const imgs = [...(prev[field] as [string, string])] as [string, string];
+      const imgs = [...(prev[field] as [string, string, string])] as [string, string, string];
       imgs[idx] = url;
       const updated = { ...prev, [field]: imgs };
       saveContent(updated);
@@ -206,7 +206,7 @@ export default function ServiciosAdmin() {
         {/* SERVICES */}
         {SERVICES.map((sv) => {
           const imgField = `${sv.id}Images` as keyof ContentState;
-          const imgs = content[imgField] as [string, string];
+          const imgs = content[imgField] as [string, string, string];
           const txt = content[`${sv.id}Text` as keyof ContentState] as ServiceText;
 
           return (
@@ -247,8 +247,8 @@ export default function ServiciosAdmin() {
 
               {/* Image fields */}
               <p style={{ fontSize: "0.8rem", fontWeight: 700, color: "#333", marginBottom: "0.75rem" }}>Imágenes del slider</p>
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
-                {([0, 1] as const).map((idx) => (
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: "1.5rem" }}>
+                {([0, 1, 2] as const).map((idx) => (
                   <div key={idx}>
                     <p style={{ fontSize: "0.8rem", fontWeight: 600, color: "#555", marginBottom: "0.5rem" }}>
                       Imagen {idx + 1}
@@ -263,7 +263,7 @@ export default function ServiciosAdmin() {
                       value={imgs[idx]}
                       onChange={(e) => {
                         setContent((prev) => {
-                          const arr = [...(prev[imgField] as [string, string])] as [string, string];
+                          const arr = [...(prev[imgField] as [string, string, string])] as [string, string, string];
                           arr[idx] = e.target.value;
                           return { ...prev, [imgField]: arr };
                         });

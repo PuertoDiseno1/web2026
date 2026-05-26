@@ -2,7 +2,8 @@
 import { useState } from "react";
 
 const fields = [
-  { key: "hero_video", label: "Video hero HOME (URL Mux — ej: https://player.mux.com/XXXXX)", type: "full" },
+  { key: "hero_video", label: "Video hero HOME — Desktop (URL Mux — ej: https://player.mux.com/XXXXX)", type: "full" },
+  { key: "hero_video_mobile", label: "Video hero HOME — Móvil (URL Mux — ej: https://player.mux.com/XXXXX)", type: "full" },
   { key: "hero_title", label: "Frase hero (HOME)", type: "textarea" },
   { key: "stats_brands", label: "Estadística: marcas (+70)", type: "text" },
   { key: "stats_years", label: "Estadística: años (+25)", type: "text" },

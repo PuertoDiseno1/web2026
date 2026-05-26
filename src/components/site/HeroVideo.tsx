@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-export default function HeroVideo({ muxId }: { muxId: string }) {
+function VideoLayer({ muxId, className }: { muxId: string; className?: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
@@ -12,17 +12,21 @@ export default function HeroVideo({ muxId }: { muxId: string }) {
     const src = `https://stream.mux.com/${muxId}.m3u8`;
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // Safari — native HLS
       video.src = src;
       video.play().catch(() => {});
     } else {
-      // Chrome, Firefox, Edge — use hls.js
       import("hls.js").then(({ default: Hls }) => {
         if (!Hls.isSupported()) return;
-        const hls = new Hls({ startLevel: -1, autoStartLoad: true });
+        const hls = new Hls({
+          startLevel: -1,
+          autoStartLoad: true,
+          capLevelToPlayerSize: false,
+          maxBufferLength: 60,
+        });
         hls.loadSource(src);
         hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
+          hls.currentLevel = data.levels.length - 1;
           video.play().catch(() => {});
         });
       });
@@ -30,14 +34,7 @@ export default function HeroVideo({ muxId }: { muxId: string }) {
   }, [muxId]);
 
   return (
-    <div
-      style={{
-        position: "absolute",
-        inset: 0,
-        zIndex: 0,
-        overflow: "hidden",
-      }}
-    >
+    <div className={className} style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
       <video
         ref={videoRef}
         autoPlay
@@ -54,9 +51,22 @@ export default function HeroVideo({ muxId }: { muxId: string }) {
           minHeight: "100%",
           transform: "translate(-50%, -50%)",
           objectFit: "cover",
-          opacity: 1,
         }}
       />
+    </div>
+  );
+}
+
+export default function HeroVideo({ muxId, muxIdMobile }: { muxId: string; muxIdMobile?: string | null }) {
+  return (
+    <div style={{ position: "absolute", inset: 0, zIndex: 0 }}>
+      {/* Desktop — oculto en móvil */}
+      <VideoLayer muxId={muxId} className="hero-video-desktop" />
+
+      {/* Móvil — solo si se configuró, oculto en desktop */}
+      {muxIdMobile && (
+        <VideoLayer muxId={muxIdMobile} className="hero-video-mobile" />
+      )}
     </div>
   );
 }

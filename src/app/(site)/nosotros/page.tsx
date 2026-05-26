@@ -88,8 +88,8 @@ export default async function NosotrosPage() {
                     <div style={{ position: "absolute", inset: 0, background: "#ccc" }} />
                   )}
                 </div>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <div>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", gap: "0.5rem" }}>
+                  <div style={{ minWidth: 0 }}>
                     <p style={{ fontSize: "clamp(0.95rem, 1.8vw, 1.8125rem)", fontWeight: 700, letterSpacing: "-0.01em", color: "#1442f0", marginBottom: "0.2rem" }}>
                       {member.name}
                     </p>
@@ -100,7 +100,7 @@ export default async function NosotrosPage() {
                       href={member.linkedin}
                       target="_blank"
                       rel="noopener noreferrer"
-                      style={{ marginTop: "2px" }}
+                      style={{ marginTop: "2px", flexShrink: 0 }}
                       aria-label="LinkedIn"
                     >
                       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#aaa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
