@@ -295,7 +295,14 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
               style={{ fontSize: "0.8rem", width: "100%", padding: "0.4rem 0.6rem", border: "1px solid #e0e0e0", borderRadius: "4px", marginBottom: "0.25rem" }}
               type="text"
               value={data.coverImage}
-              onChange={(e) => syncCoverToImages(e.target.value)}
+              onChange={(e) => {
+                const url = e.target.value;
+                setData((d) => {
+                  const imgs = JSON.parse(d.images || "[]") as string[];
+                  const updatedImgs = url ? [url, ...imgs.filter((_, i) => i > 0)] : imgs;
+                  return { ...d, coverImage: url, images: JSON.stringify(updatedImgs) };
+                });
+              }}
               placeholder="URL de imagen o GIF"
             />
             <label style={{ display: "block", marginTop: "0.5rem", padding: "0.5rem 0.75rem", border: "1px dashed #ccc", borderRadius: "4px", textAlign: "center", cursor: "pointer", fontSize: "0.8rem", color: "#666" }}>
