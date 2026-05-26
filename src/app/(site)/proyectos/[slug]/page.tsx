@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { encodePath } from "@/lib/images";
+import MuxVideo from "@/components/site/MuxVideo";
 
 async function getProject(slug: string) {
   try {
@@ -89,15 +90,24 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
       {/* HERO — video tiene prioridad sobre imagen */}
       {videoUrl ? (
         <div style={{ width: "100%", aspectRatio: "16/7", position: "relative", overflow: "hidden", background: "#000" }}>
-          {embedSrc ? (
-            /* Mux/YouTube/Vimeo iframe — recortar ~62px abajo para ocultar controles Mux */
-            <div style={{ position: "absolute", inset: 0, bottom: isMux ? "-62px" : 0, overflow: "hidden" }}>
-              <iframe
-                src={embedSrc}
-                allow="autoplay; fullscreen; picture-in-picture; muted"
-                style={{ position: "absolute", inset: 0, width: "100%", height: isMux ? "calc(100% + 62px)" : "100%", border: "none" }}
-              />
-            </div>
+          {isMux ? (
+            <MuxVideo playbackId={extractMuxId(videoUrl)} />
+          ) : embedSrc ? (
+            // YouTube/Vimeo: iframe 16:9 sobredimensionado y centrado para cubrir el hero 16:7
+            <iframe
+              src={embedSrc}
+              allow="autoplay; fullscreen; picture-in-picture; muted"
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "56.25vw",
+                top: "50%",
+                left: 0,
+                transform: "translateY(-50%)",
+                border: "none",
+                pointerEvents: "none",
+              }}
+            />
           ) : (
             <video
               src={videoUrl}
