@@ -389,3 +389,17 @@ html, body { max-width: 100%; overflow-x: hidden; }
   .hero-video-mobile  { display: block; }
 }
 
+/* ── HERO PROYECTO ── */
+.proyecto-hero {
+  width: 100%;
+  aspect-ratio: 16 / 5;
+  position: relative;
+  overflow: hidden;
+}
+@media (max-width: 768px) {
+  .proyecto-hero {
+    aspect-ratio: unset;
+    height: calc(56.25vw + 150px);
+  }
+}
+

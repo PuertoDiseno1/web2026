@@ -89,7 +89,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
     <div style={{ background: "#fff", minHeight: "100vh" }}>
       {/* HERO — video tiene prioridad sobre imagen */}
       {videoUrl ? (
-        <div style={{ width: "100%", height: "calc(56.25vw + 150px)", position: "relative", overflow: "hidden", background: "#000" }}>
+        <div className="proyecto-hero" style={{ background: "#000" }}>
           {isMux ? (
             <MuxVideo playbackId={extractMuxId(videoUrl)} />
           ) : embedSrc ? (
@@ -120,7 +120,7 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
           )}
         </div>
       ) : project.coverImage && (
-        <div style={{ width: "100%", height: "calc(56.25vw + 150px)", position: "relative", overflow: "hidden" }}>
+        <div className="proyecto-hero">
           <Image
             src={project.coverImage}
             alt={project.title}
