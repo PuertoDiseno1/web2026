@@ -9,10 +9,11 @@ const SERVICES = [
   { id: "industrial", label: "Diseño Industrial" },
 ];
 
+const R2 = "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev";
 const DEFAULT_IMAGES: Record<string, [string, string]> = {
-  estrategia: ["/servicios/Estrategia/img1.jpg", "/servicios/Estrategia/img2.jpg"],
-  branding: ["/servicios/Gráfico/img1.jpg", "/servicios/Gráfico/img2.jpg"],
-  industrial: ["/servicios/Industrial/img1.jpg", "/servicios/Industrial/img2.jpg"],
+  estrategia: [`${R2}/servicios/Estrategia/img1.jpg`, `${R2}/servicios/Estrategia/img2.jpg`],
+  branding: [`${R2}/servicios/Grafico/img1.jpg`, `${R2}/servicios/Grafico/img2.jpg`],
+  industrial: [`${R2}/servicios/Industrial/img1.jpg`, `${R2}/servicios/Industrial/img2.jpg`],
 };
 
 const DEFAULT_TEXT: Record<string, { title: string; desc: string; items: string }> = {
