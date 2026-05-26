@@ -67,39 +67,64 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
     }
   }
 
-  function syncCoverToImages(url: string) {
-    setData((d) => {
-      const imgs = JSON.parse(d.images || "[]") as string[];
-      // Replace first image (portada) with the new cover, keep the rest
-      const updated = url ? [url, ...imgs.filter((_, i) => i > 0)] : imgs;
-      return { ...d, coverImage: url, images: JSON.stringify(updated) };
+  async function saveProject(projectData: Project) {
+    if (!isEdit) return;
+    const res = await fetch(`/api/projects/${project!.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(projectData),
     });
+    if (!res.ok) setMsg("Error al guardar.");
   }
 
   async function handleCoverUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
     setUploadingCover(true);
-    await uploadFile(file, (url) => { syncCoverToImages(url); setUploadingCover(false); });
+    await uploadFile(file, (url) => {
+      setData((d) => {
+        const imgs = JSON.parse(d.images || "[]") as string[];
+        const updatedImgs = url ? [url, ...imgs.filter((_, i) => i > 0)] : imgs;
+        const updated = { ...d, coverImage: url, images: JSON.stringify(updatedImgs) };
+        saveProject(updated);
+        return updated;
+      });
+      setUploadingCover(false);
+    });
   }
 
   async function handleHomeImageUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
     setUploadingHomeImage(true);
-    await uploadFile(file, (url) => { update("homeImage", url); setUploadingHomeImage(false); });
+    await uploadFile(file, (url) => {
+      setData((d) => {
+        const updated = { ...d, homeImage: url };
+        saveProject(updated);
+        return updated;
+      });
+      setUploadingHomeImage(false);
+    });
   }
 
   async function handleImagesUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const files = Array.from(e.target.files ?? []);
     if (!files.length) return;
+    e.target.value = "";
     setUploadingImages(true);
     const current = JSON.parse(data.images || "[]") as string[];
     const urls: string[] = [...current];
     for (const file of files) {
       await uploadFile(file, (url) => urls.push(url));
     }
-    update("images", JSON.stringify(urls));
+    const newImages = JSON.stringify(urls);
+    setData((d) => {
+      const updated = { ...d, images: newImages };
+      saveProject(updated);
+      return updated;
+    });
     setUploadingImages(false);
   }
 

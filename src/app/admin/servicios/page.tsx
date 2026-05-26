@@ -111,8 +111,15 @@ export default function ServiciosAdmin() {
   async function handleHeroUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
     const url = await uploadFile(file, "hero");
-    if (url) setContent((prev) => ({ ...prev, heroImage: url }));
+    if (url) {
+      setContent((prev) => {
+        const updated = { ...prev, heroImage: url };
+        saveContent(updated);
+        return updated;
+      });
+    }
   }
 
   async function handleServiceImageUpload(
@@ -122,6 +129,7 @@ export default function ServiciosAdmin() {
   ) {
     const file = e.target.files?.[0];
     if (!file) return;
+    e.target.value = "";
     const key = `${serviceId}_${idx}`;
     const url = await uploadFile(file, key);
     if (!url) return;
@@ -129,7 +137,9 @@ export default function ServiciosAdmin() {
     setContent((prev) => {
       const imgs = [...(prev[field] as [string, string])] as [string, string];
       imgs[idx] = url;
-      return { ...prev, [field]: imgs };
+      const updated = { ...prev, [field]: imgs };
+      saveContent(updated);
+      return updated;
     });
   }
 
@@ -141,15 +151,21 @@ export default function ServiciosAdmin() {
     }));
   }
 
-  async function handleSave() {
-    setSaving(true);
-    setMsg("");
+  async function saveContent(updated: ContentState) {
     const res = await fetch("/api/page-content/servicios", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(content),
+      body: JSON.stringify(updated),
     });
-    setMsg(res.ok ? "Guardado correctamente." : "Error al guardar.");
+    if (!res.ok) setMsg("Error al guardar.");
+    return res.ok;
+  }
+
+  async function handleSave() {
+    setSaving(true);
+    setMsg("");
+    const ok = await saveContent(content);
+    setMsg(ok ? "Guardado correctamente." : "Error al guardar.");
     setSaving(false);
   }
 
