@@ -91,12 +91,20 @@ export default function ServiciosAdmin() {
 
   async function uploadFile(file: File, key: string) {
     setUploading(key);
-    const form = new FormData();
-    form.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: form });
-    const json = await res.json();
-    setUploading(null);
-    return json.url as string | undefined;
+    setMsg("");
+    try {
+      const form = new FormData();
+      form.append("file", file);
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const json = await res.json();
+      setUploading(null);
+      if (!json.url) setMsg(`Error al subir: ${json.error ?? "respuesta inesperada"}`);
+      return json.url as string | undefined;
+    } catch {
+      setUploading(null);
+      setMsg("Error de red al subir el archivo.");
+      return undefined;
+    }
   }
 
   async function handleHeroUpload(e: React.ChangeEvent<HTMLInputElement>) {

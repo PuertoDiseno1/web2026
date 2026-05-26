@@ -54,9 +54,17 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
   async function uploadFile(file: File, onDone: (url: string) => void) {
     const form = new FormData();
     form.append("file", file);
-    const res = await fetch("/api/upload", { method: "POST", body: form });
-    const json = await res.json();
-    if (json.url) onDone(json.url);
+    try {
+      const res = await fetch("/api/upload", { method: "POST", body: form });
+      const json = await res.json();
+      if (json.url) {
+        onDone(json.url);
+      } else {
+        setMsg(`Error al subir: ${json.error ?? "respuesta inesperada"}`);
+      }
+    } catch {
+      setMsg("Error de red al subir el archivo.");
+    }
   }
 
   function syncCoverToImages(url: string) {
@@ -208,10 +216,10 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
             <label style={labelStyle}>URL de video (hero del proyecto)</label>
             <input
               style={inputStyle}
-              type="url"
+              type="text"
               value={data.videoEmbed}
               onChange={(e) => update("videoEmbed", e.target.value)}
-              placeholder="https://www.youtube.com/watch?v=... o https://vimeo.com/..."
+              placeholder="https://player.mux.com/... o https://youtu.be/... o https://vimeo.com/..."
             />
             <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.35rem" }}>Pega la URL del video. Se mostrará como hero en la parte superior del proyecto.</p>
           </div>
