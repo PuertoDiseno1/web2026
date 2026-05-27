@@ -18,6 +18,7 @@ interface Project {
   coverImage: string;
   homeImage: string;
   coverVideo: string;
+  heroMedia: string;
   images: string;
   featured: boolean;
   published: boolean;
@@ -25,7 +26,7 @@ interface Project {
 
 const defaultProject: Project = {
   order: 0, slug: "", title: "", subtitle: "", description: "",
-  services: "", categories: "", videoEmbed: "", coverImage: "", homeImage: "", coverVideo: "", images: "[]",
+  services: "", categories: "", videoEmbed: "", coverImage: "", homeImage: "", coverVideo: "", heroMedia: "video", images: "[]",
   featured: false, published: true,
 };
 
@@ -361,6 +362,25 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
               onChange={(e) => update("coverVideo", e.target.value.trim())}
               placeholder="ej: abc123xyz (Playback ID de Mux)"
             />
+
+            {/* Toggle: mostrar video o imagen en el hero */}
+            <div style={{ marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
+              <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#333" }}>Hero del proyecto:</span>
+              <button
+                type="button"
+                onClick={() => update("heroMedia", "video")}
+                style={{ padding: "0.35rem 0.85rem", borderRadius: "4px", border: "1px solid #ccc", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", background: data.heroMedia !== "image" ? "#0a0a0a" : "#fff", color: data.heroMedia !== "image" ? "#fff" : "#333" }}
+              >
+                Video
+              </button>
+              <button
+                type="button"
+                onClick={() => update("heroMedia", "image")}
+                style={{ padding: "0.35rem 0.85rem", borderRadius: "4px", border: "1px solid #ccc", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", background: data.heroMedia === "image" ? "#0a0a0a" : "#fff", color: data.heroMedia === "image" ? "#fff" : "#333" }}
+              >
+                Imagen
+              </button>
+            </div>
           </div>
 
           <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid #e8e8e8" }}>

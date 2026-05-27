@@ -80,7 +80,8 @@ export default async function ProjectPage({ params }: { params: Promise<{ slug: 
 
   // Usar videoEmbed primero, luego coverVideo como fallback para el hero
   const rawVideoUrl = project.videoEmbed?.trim() || project.coverVideo?.trim() || null;
-  const videoUrl = rawVideoUrl;
+  const showVideo = project.heroMedia !== "image" && !!rawVideoUrl;
+  const videoUrl = showVideo ? rawVideoUrl : null;
   const embedSrc = videoUrl ? getEmbedSrc(videoUrl) : null;
   const isMux = !!(videoUrl && (videoUrl.includes("player.mux.com") || /^[A-Za-z0-9]+$/.test(videoUrl)));
   const isDirectVideo = videoUrl && !embedSrc && !isMux;
