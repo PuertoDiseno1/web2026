@@ -30,7 +30,7 @@ export default async function Footer() {
 
           {/* Nav links */}
           <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            {[["Nosotros", "/nosotros"], ["Servicios", "/servicios"], ["Proyectos", "/proyectos"], ["Blog", "/blog"]].map(([label, href]) => (
+            {[["Nosotros", "/nosotros"], ["Servicios", "/servicios"], ["Proyectos", "/proyectos"]].map(([label, href]) => (
               <Link key={href} href={href} style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.625rem)", fontWeight: 300, color: "rgba(255,255,255,0.85)", lineHeight: 1.8 }}>
                 {label}
               </Link>

@@ -146,7 +146,7 @@ export default async function ServiciosPage() {
             }}>
               {title}
             </h2>
-            <p style={{ fontSize: "clamp(0.85rem, 1.5vw, 2rem)", fontWeight: 300, color: "#555", lineHeight: 1.7, maxWidth: "40ch" }}>
+            <p style={{ fontSize: "clamp(0.8rem, 1.1vw, 1.35rem)", fontWeight: 300, color: "#555", lineHeight: 1.7, maxWidth: "40ch" }}>
               {desc}
             </p>
           </div>
