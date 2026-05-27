@@ -248,6 +248,20 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
               placeholder="https://player.mux.com/... o https://youtu.be/... o https://vimeo.com/..."
             />
             <p style={{ fontSize: "0.75rem", color: "#888", marginTop: "0.35rem" }}>Pega la URL del video. Se mostrará como hero en la parte superior del proyecto.</p>
+            {/* Toggle: mostrar video o imagen en el hero */}
+            <div style={{ marginTop: "0.75rem", display: "flex", alignItems: "center", gap: "0.5rem" }}>
+              <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#333" }}>Mostrar en hero:</span>
+              <button
+                type="button"
+                onClick={() => update("heroMedia", "video")}
+                style={{ padding: "0.3rem 0.8rem", borderRadius: "4px", border: "1px solid #ccc", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", background: data.heroMedia !== "image" ? "#0a0a0a" : "#fff", color: data.heroMedia !== "image" ? "#fff" : "#333" }}
+              >Video</button>
+              <button
+                type="button"
+                onClick={() => update("heroMedia", "image")}
+                style={{ padding: "0.3rem 0.8rem", borderRadius: "4px", border: "1px solid #ccc", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", background: data.heroMedia === "image" ? "#0a0a0a" : "#fff", color: data.heroMedia === "image" ? "#fff" : "#333" }}
+              >Imagen portada</button>
+            </div>
           </div>
         </div>
 
@@ -362,25 +376,6 @@ export default function ProjectForm({ project }: { project?: Partial<Project> })
               onChange={(e) => update("coverVideo", e.target.value.trim())}
               placeholder="ej: abc123xyz (Playback ID de Mux)"
             />
-
-            {/* Toggle: mostrar video o imagen en el hero */}
-            <div style={{ marginTop: "1rem", display: "flex", alignItems: "center", gap: "0.75rem" }}>
-              <span style={{ fontSize: "0.8rem", fontWeight: 600, color: "#333" }}>Hero del proyecto:</span>
-              <button
-                type="button"
-                onClick={() => update("heroMedia", "video")}
-                style={{ padding: "0.35rem 0.85rem", borderRadius: "4px", border: "1px solid #ccc", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", background: data.heroMedia !== "image" ? "#0a0a0a" : "#fff", color: data.heroMedia !== "image" ? "#fff" : "#333" }}
-              >
-                Video
-              </button>
-              <button
-                type="button"
-                onClick={() => update("heroMedia", "image")}
-                style={{ padding: "0.35rem 0.85rem", borderRadius: "4px", border: "1px solid #ccc", fontSize: "0.8rem", fontWeight: 600, cursor: "pointer", background: data.heroMedia === "image" ? "#0a0a0a" : "#fff", color: data.heroMedia === "image" ? "#fff" : "#333" }}
-              >
-                Imagen
-              </button>
-            </div>
           </div>
 
           <div style={{ background: "#fff", padding: "1.5rem", borderRadius: "8px", border: "1px solid #e8e8e8" }}>
