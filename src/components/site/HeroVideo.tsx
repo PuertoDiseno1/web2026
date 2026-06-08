@@ -81,17 +81,8 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
         <div style={{
           position: "absolute", inset: 0,
           background: "#04081c",
-          display: "flex", alignItems: "center", justifyContent: "center",
           transition: "opacity 0.4s",
-        }}>
-          <div style={{
-            width: 36, height: 36,
-            border: "3px solid rgba(255,255,255,0.2)",
-            borderTopColor: "#fff",
-            borderRadius: "50%",
-            animation: "hero-spin 0.8s linear infinite",
-          }} />
-        </div>
+        }} />
       )}
     </div>
   );
