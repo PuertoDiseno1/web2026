@@ -18,7 +18,7 @@ export default function MuxVideo({ playbackId, style }: MuxVideoProps) {
   useEffect(() => {
     const el = ref.current as HTMLVideoElement | null;
     if (!el) return;
-    const onPlaying = () => setLoading(false);
+    const onPlaying = () => setTimeout(() => setLoading(false), 2000);
     el.addEventListener("playing", onPlaying);
     return () => el.removeEventListener("playing", onPlaying);
   }, []);

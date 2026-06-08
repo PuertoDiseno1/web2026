@@ -10,7 +10,7 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
     const video = videoRef.current;
     if (!video) return;
 
-    const onPlaying = () => setLoading(false);
+    const onPlaying = () => setTimeout(() => setLoading(false), 2000);
     video.addEventListener("playing", onPlaying);
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
