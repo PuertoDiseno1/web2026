@@ -10,8 +10,23 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
     const video = videoRef.current;
     if (!video) return;
 
-    const onPlaying = () => setTimeout(() => setLoading(false), 2000);
-    video.addEventListener("playing", onPlaying);
+    // Wait until 3 s of content have decoded so HLS has had time to ramp to
+    // high quality before revealing the video (avoids pixelated first frames).
+    let revealed = false;
+    const reveal = () => {
+      if (!revealed) { revealed = true; setLoading(false); }
+    };
+
+    const onTimeUpdate = () => {
+      if (video.currentTime >= 3) {
+        video.removeEventListener("timeupdate", onTimeUpdate);
+        reveal();
+      }
+    };
+    video.addEventListener("timeupdate", onTimeUpdate);
+
+    // Safety fallback: reveal after 8 s regardless
+    const fallback = setTimeout(reveal, 8000);
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
 
@@ -36,7 +51,10 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
       });
     }
 
-    return () => video.removeEventListener("playing", onPlaying);
+    return () => {
+      video.removeEventListener("timeupdate", onTimeUpdate);
+      clearTimeout(fallback);
+    };
   }, [muxId]);
 
   return (
