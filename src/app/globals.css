@@ -382,6 +382,9 @@ html, body { max-width: 100%; overflow-x: hidden; }
 }
 
 /* ── HERO VIDEO DESKTOP / MÓVIL ── */
+@keyframes hero-spin {
+  to { transform: rotate(360deg); }
+}
 .hero-video-desktop { display: block; }
 .hero-video-mobile  { display: none; }
 @media (max-width: 768px) {

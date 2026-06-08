@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 function VideoLayer({ muxId, className }: { muxId: string; className?: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
+
+    const onPlaying = () => setLoading(false);
+    video.addEventListener("playing", onPlaying);
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
 
@@ -31,6 +35,8 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
         });
       });
     }
+
+    return () => video.removeEventListener("playing", onPlaying);
   }, [muxId]);
 
   return (
@@ -53,6 +59,22 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
           objectFit: "cover",
         }}
       />
+      {loading && (
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "#04081c",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "opacity 0.4s",
+        }}>
+          <div style={{
+            width: 36, height: 36,
+            border: "3px solid rgba(255,255,255,0.2)",
+            borderTopColor: "#fff",
+            borderRadius: "50%",
+            animation: "hero-spin 0.8s linear infinite",
+          }} />
+        </div>
+      )}
     </div>
   );
 }

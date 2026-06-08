@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 interface MuxVideoProps {
   playbackId: string;
@@ -9,9 +9,18 @@ interface MuxVideoProps {
 
 export default function MuxVideo({ playbackId, style }: MuxVideoProps) {
   const ref = useRef<HTMLElement>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     import("@mux/mux-video");
+  }, []);
+
+  useEffect(() => {
+    const el = ref.current as HTMLVideoElement | null;
+    if (!el) return;
+    const onPlaying = () => setLoading(false);
+    el.addEventListener("playing", onPlaying);
+    return () => el.removeEventListener("playing", onPlaying);
   }, []);
 
   return (
@@ -40,6 +49,22 @@ export default function MuxVideo({ playbackId, style }: MuxVideoProps) {
           ...style,
         }}
       />
+      {loading && (
+        <div style={{
+          position: "absolute", inset: 0,
+          background: "#04081c",
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "opacity 0.4s",
+        }}>
+          <div style={{
+            width: 36, height: 36,
+            border: "3px solid rgba(255,255,255,0.2)",
+            borderTopColor: "#fff",
+            borderRadius: "50%",
+            animation: "hero-spin 0.8s linear infinite",
+          }} />
+        </div>
+      )}
     </div>
   );
 }
