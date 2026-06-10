@@ -20,7 +20,29 @@ export default function MuxVideo({ playbackId, style }: MuxVideoProps) {
     if (!el) return;
     const onPlaying = () => setTimeout(() => setLoading(false), 2000);
     el.addEventListener("playing", onPlaying);
-    return () => el.removeEventListener("playing", onPlaying);
+
+    // mux-video renders an internal <video> in its shadow DOM with object-fit: contain.
+    // We need to override it to cover so the video fills without black bars.
+    const applyObjectFitCover = () => {
+      const shadow = (el as HTMLElement & { shadowRoot: ShadowRoot | null }).shadowRoot;
+      if (shadow) {
+        const internalVideo = shadow.querySelector("video");
+        if (internalVideo) {
+          internalVideo.style.objectFit = "cover";
+          internalVideo.style.width = "100%";
+          internalVideo.style.height = "100%";
+        }
+      }
+    };
+
+    // Try immediately and also after a short delay (shadow DOM may not be ready instantly)
+    applyObjectFitCover();
+    const t = setTimeout(applyObjectFitCover, 300);
+
+    return () => {
+      el.removeEventListener("playing", onPlaying);
+      clearTimeout(t);
+    };
   }, []);
 
   return (

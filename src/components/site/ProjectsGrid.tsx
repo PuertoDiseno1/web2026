@@ -119,11 +119,14 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                           <Image src={encodePath(p.coverImage)} alt={p.title} fill unoptimized sizes="33vw" style={{ objectFit: "cover" }} />
                         )
                       )}
-                      {/* Video */}
+                      {/* Video — use Mux animated thumbnail for crisp grid display */}
                       {p.coverVideo && (
-                        <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-                          <MuxVideo playbackId={getMuxPlaybackId(p.coverVideo)} />
-                        </div>
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img
+                          src={`https://image.mux.com/${getMuxPlaybackId(p.coverVideo)}/animated.webp?width=600&fps=15`}
+                          alt={p.title}
+                          style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                        />
                       )}
                       {/* Hover overlay */}
                       <div className="project-tile-overlay">
@@ -150,7 +153,7 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
         }
         @media (max-width: 550px) {
           .projects-masonry { flex-direction: column; }
-          .projects-masonry > div { flex: 1 1 100%; }
+          .projects-masonry > div { flex: 1 1 100%; width: 100%; }
         }
         .project-tile-overlay {
           position: absolute;
