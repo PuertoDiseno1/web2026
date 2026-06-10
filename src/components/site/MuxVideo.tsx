@@ -36,10 +36,16 @@ export default function MuxVideo({ playbackId, style }: MuxVideoProps) {
         style={{
           display: "block",
           position: "absolute",
-          inset: 0,
-          width: "100%",
-          height: "100%",
+          top: "50%",
+          left: "50%",
+          width: "177.78vh",
+          minWidth: "100%",
+          height: "56.25vw",
+          minHeight: "100%",
+          transform: "translate(-50%, -50%)",
           objectFit: "cover",
+          margin: 0,
+          padding: 0,
           ...style,
         }}
       />
