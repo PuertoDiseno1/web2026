@@ -24,7 +24,7 @@ export default function MuxVideo({ playbackId, style }: MuxVideoProps) {
   }, []);
 
   return (
-    <div style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
+    <div className="mux-video-wrap" style={{ position: "absolute", inset: 0, overflow: "hidden" }}>
       {/* @ts-expect-error mux-video is a custom element */}
       <mux-video
         ref={ref}
