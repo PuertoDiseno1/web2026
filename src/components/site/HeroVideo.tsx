@@ -81,8 +81,31 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
         <div style={{
           position: "absolute", inset: 0,
           background: "#04081c",
-          transition: "opacity 0.4s",
-        }} />
+          display: "flex", alignItems: "center", justifyContent: "center",
+          transition: "opacity 0.6s",
+        }}>
+          <style>{`
+            @keyframes pd-bar {
+              0%, 100% { transform: scaleY(0.35); opacity: 0.4; }
+              50%       { transform: scaleY(1);    opacity: 1; }
+            }
+          `}</style>
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            {[0, 0.15, 0.3].map((delay, i) => (
+              <div
+                key={i}
+                style={{
+                  width: 3,
+                  height: 28,
+                  borderRadius: 2,
+                  background: "#1442f0",
+                  transformOrigin: "center",
+                  animation: `pd-bar 1.1s ease-in-out ${delay}s infinite`,
+                }}
+              />
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
