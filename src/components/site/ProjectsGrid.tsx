@@ -122,7 +122,10 @@ export default function ProjectsGrid({ projects }: { projects: Project[] }) {
                       {/* Video */}
                       {p.coverVideo && (
                         <div style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}>
-                          <MuxVideo playbackId={getMuxPlaybackId(p.coverVideo)} />
+                          <MuxVideo
+                            playbackId={getMuxPlaybackId(p.coverVideo)}
+                            style={{ width: "100%", height: "100%", minWidth: "unset", minHeight: "unset", top: 0, left: 0, transform: "none" }}
+                          />
                         </div>
                       )}
                       {/* Hover overlay */}
