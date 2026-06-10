@@ -373,7 +373,7 @@ img {
 @media (max-width: 550px) { .projects-masonry { column-count: 1; } }
 
 /* ── OVERFLOW PROTECTION ── */
-html, body { max-width: 100%; overflow-x: hidden; }
+html, body { max-width: 100%; overflow-x: clip; }
 
 /* ── MOBILE GENERAL PADDING ── */
 @media (max-width: 640px) {
