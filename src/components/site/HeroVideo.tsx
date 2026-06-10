@@ -18,15 +18,15 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
     };
 
     const onTimeUpdate = () => {
-      if (video.currentTime >= 3) {
+      if (video.currentTime >= 6) {
         video.removeEventListener("timeupdate", onTimeUpdate);
         reveal();
       }
     };
     video.addEventListener("timeupdate", onTimeUpdate);
 
-    // Safety fallback: reveal after 8 s regardless
-    const fallback = setTimeout(reveal, 8000);
+    // Safety fallback: reveal after 12 s regardless
+    const fallback = setTimeout(reveal, 12000);
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
 
@@ -37,10 +37,11 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
       import("hls.js").then(({ default: Hls }) => {
         if (!Hls.isSupported()) return;
         const hls = new Hls({
-          startLevel: -1,
+          startLevel: 999, // will be clamped to highest available level
           autoStartLoad: true,
           capLevelToPlayerSize: false,
           maxBufferLength: 60,
+          abrEwmaDefaultEstimate: 10_000_000, // assume 10 Mbps so ABR starts high
         });
         hls.loadSource(src);
         hls.attachMedia(video);
