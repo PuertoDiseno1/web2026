@@ -404,5 +404,22 @@ html, body { max-width: 100%; overflow-x: hidden; }
     aspect-ratio: unset;
     height: calc(56.25vw + 150px);
   }
+
+  /* En móvil el truco 177.78vh/56.25vw falla con overflow-x:hidden;
+     forzamos que el video cubra el contenedor con inset 0 */
+  .proyecto-hero video,
+  .proyecto-hero mux-video,
+  .proyecto-hero iframe {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-width: unset !important;
+    min-height: unset !important;
+    transform: none !important;
+    top: unset !important;
+    left: unset !important;
+    object-fit: cover !important;
+  }
 }
 
