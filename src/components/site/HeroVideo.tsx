@@ -17,27 +17,27 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
       if (!revealed) { revealed = true; setLoading(false); }
     };
 
-    const onTimeUpdate = () => {
-      if (video.currentTime >= 6) {
-        video.removeEventListener("timeupdate", onTimeUpdate);
-        reveal();
-      }
-    };
-    video.addEventListener("timeupdate", onTimeUpdate);
-
-    // Safety fallback: reveal after 12 s regardless
-    const fallback = setTimeout(reveal, 12000);
+    // Safety fallback: reveal after 8 s regardless
+    const fallback = setTimeout(reveal, 8000);
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
 
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
+      // Safari native HLS — no quality control, reveal after 2s of playback
+      const onTimeUpdate = () => {
+        if (video.currentTime >= 2) {
+          video.removeEventListener("timeupdate", onTimeUpdate);
+          reveal();
+        }
+      };
+      video.addEventListener("timeupdate", onTimeUpdate);
       video.src = src;
       video.play().catch(() => {});
     } else {
       import("hls.js").then(({ default: Hls }) => {
         if (!Hls.isSupported()) return;
         const hls = new Hls({
-          startLevel: 999, // will be clamped to highest available level
+          startLevel: 999, // clamps to highest available level
           autoStartLoad: true,
           capLevelToPlayerSize: false,
           maxBufferLength: 60,
@@ -48,6 +48,12 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
         hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
           hls.currentLevel = data.levels.length - 1;
           video.play().catch(() => {});
+        });
+        // Reveal as soon as the first fragment at the highest level finishes loading
+        hls.on(Hls.Events.FRAG_LOADED, (_e, data) => {
+          if (data.frag.level === hls.currentLevel) {
+            reveal();
+          }
         });
       });
     }
