@@ -22,11 +22,13 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
 
+    let onTimeUpdate: (() => void) | null = null;
+
     if (video.canPlayType("application/vnd.apple.mpegurl")) {
       // Safari native HLS — no quality control, reveal after 2s of playback
-      const onTimeUpdate = () => {
+      onTimeUpdate = () => {
         if (video.currentTime >= 2) {
-          video.removeEventListener("timeupdate", onTimeUpdate);
+          video.removeEventListener("timeupdate", onTimeUpdate!);
           reveal();
         }
       };
@@ -59,7 +61,7 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
     }
 
     return () => {
-      video.removeEventListener("timeupdate", onTimeUpdate);
+      if (onTimeUpdate) video.removeEventListener("timeupdate", onTimeUpdate);
       clearTimeout(fallback);
     };
   }, [muxId]);
