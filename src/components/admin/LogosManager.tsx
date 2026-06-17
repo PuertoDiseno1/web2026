@@ -18,23 +18,24 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
       form.append("file", file);
       const res = await fetch("/api/clients/logos", { method: "POST", body: form });
       if (res.ok) {
-        const { filename } = await res.json();
-        setLogos((prev) => [...prev, filename]);
+        const { url } = await res.json();
+        setLogos((prev) => [...prev, url]);
       }
     }
     setUploading(false);
     if (inputRef.current) inputRef.current.value = "";
   }
 
-  async function handleDelete(filename: string) {
-    if (!confirm(`¿Eliminar ${filename}?`)) return;
-    setDeleting(filename);
+  async function handleDelete(url: string) {
+    const name = url.split("/").pop() ?? url;
+    if (!confirm(`¿Eliminar ${name}?`)) return;
+    setDeleting(url);
     await fetch("/api/clients/logos", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ filename }),
+      body: JSON.stringify({ url }),
     });
-    setLogos((prev) => prev.filter((f) => f !== filename));
+    setLogos((prev) => prev.filter((f) => f !== url));
     setDeleting(null);
   }
 
@@ -94,9 +95,9 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
             gap: "1rem",
           }}
         >
-          {logos.map((filename) => (
+          {logos.map((url) => (
             <div
-              key={filename}
+              key={url}
               style={{
                 position: "relative",
                 background: "#f9f9f9",
@@ -107,15 +108,15 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
               }}
             >
               <Image
-                src={`/clientes/${encodeURIComponent(filename)}`}
-                alt={filename}
+                src={url}
+                alt={url.split("/").pop() ?? ""}
                 fill
                 style={{ objectFit: "contain", padding: "12px" }}
                 sizes="160px"
               />
               <button
-                onClick={() => handleDelete(filename)}
-                disabled={deleting === filename}
+                onClick={() => handleDelete(url)}
+                disabled={deleting === url}
                 title="Eliminar"
                 style={{
                   position: "absolute",
@@ -157,7 +158,7 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
                     whiteSpace: "nowrap",
                   }}
                 >
-                  {filename}
+                  {url.split("/").pop()}
                 </p>
               </div>
             </div>
