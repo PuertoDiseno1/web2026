@@ -107,7 +107,7 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
               }}
             >
               <Image
-                src={`/clientes/${filename}`}
+                src={`/clientes/${encodeURIComponent(filename)}`}
                 alt={filename}
                 fill
                 style={{ objectFit: "contain", padding: "12px" }}
