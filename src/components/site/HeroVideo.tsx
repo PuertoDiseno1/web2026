@@ -21,65 +21,73 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
       if (!revealed) { revealed = true; setReady(true); }
     };
 
-    // Safety fallback: reveal after 10 s regardless
-    const fallback = setTimeout(reveal, 10000);
+    // Safety fallback: reveal after 12 s regardless
+    const fallback = setTimeout(reveal, 12000);
 
     const src = `https://stream.mux.com/${muxId}.m3u8`;
-
-    let onTimeUpdate: (() => void) | null = null;
     let hls: import("hls.js").default | null = null;
+    let targetH = 0; // decoded height we consider "full quality"
 
-    if (video.canPlayType("application/vnd.apple.mpegurl")) {
-      // Safari native HLS — no quality control. Wait a bit longer (4 s of
-      // playback) so its own ABR has time to climb before we reveal.
-      onTimeUpdate = () => {
-        if (video.currentTime >= 4) {
-          video.removeEventListener("timeupdate", onTimeUpdate!);
-          reveal();
-        }
-      };
-      video.addEventListener("timeupdate", onTimeUpdate);
-      video.src = src;
-      video.play().catch(() => {});
-    } else {
-      import("hls.js").then(({ default: Hls }) => {
-        if (!Hls.isSupported()) return;
+    // Reveal only once the frame actually being decoded has reached full
+    // quality and enough is buffered — until then the crisp poster covers the
+    // pixelated HLS ramp, so the low-quality start is never seen.
+    let bestH = 0;
+    let lastImprove = performance.now();
+    const check = () => {
+      const h = video.videoHeight;
+      if (h > bestH) { bestH = h; lastImprove = performance.now(); }
+      const buffered =
+        video.buffered.length > 0
+          ? video.buffered.end(video.buffered.length - 1) - video.currentTime
+          : 0;
+      if (buffered < 1.5 || video.currentTime < 1) return;
+      if (targetH > 0) {
+        // hls.js path: we know the top rendition — reveal only when it's decoding.
+        if (video.videoHeight >= targetH * 0.9) reveal();
+      } else {
+        // Native fallback: no level info — reveal once quality has plateaued.
+        if (bestH > 0 && performance.now() - lastImprove > 2500) reveal();
+      }
+    };
+    video.addEventListener("resize", check);   // fires whenever decoded res changes
+    video.addEventListener("timeupdate", check);
+    video.addEventListener("progress", check);
+    const poll = setInterval(check, 500);
+
+    // Prefer hls.js whenever the browser supports it (Media Source Extensions):
+    // it lets us pin the highest rendition. Native HLS (many WebKit browsers)
+    // often stays stuck on a low, pixelated level with no way to force quality,
+    // so we only fall back to it on iOS Safari where hls.js is unavailable.
+    import("hls.js").then(({ default: Hls }) => {
+      if (Hls.isSupported()) {
         hls = new Hls({
-          startLevel: 999, // clamps to highest available level
-          autoStartLoad: true,
-          // Do NOT cap to player size: the cover-sized element reports a
-          // misleading box and makes hls.js pick a low, blurry rendition.
+          autoStartLoad: false, // pin the top rendition before any fragment loads
           capLevelToPlayerSize: false,
           maxBufferLength: 60,
-          abrEwmaDefaultEstimate: 10_000_000, // assume 10 Mbps so ABR starts high
         });
-        let topFrags = 0;
         hls.loadSource(src);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
-          // Lock to the highest rendition (no ABR dips, so text stays sharp).
-          // The poster hides the initial load so the ramp is never visible.
-          hls!.currentLevel = data.levels.length - 1;
+          const top = data.levels.length - 1;
+          targetH = data.levels[top]?.height ?? 0;
+          hls!.startLevel = top;   // first fragment loaded is the highest
+          hls!.currentLevel = top; // lock there (no ABR dips)
+          hls!.startLoad();
           video.play().catch(() => {});
         });
-        // Reveal only once two full-quality fragments at the top level have
-        // loaded AND enough is buffered ahead — so what first appears on screen
-        // is already sharp and playback won't immediately stall.
-        hls.on(Hls.Events.FRAG_LOADED, (_e, data) => {
-          if (data.frag.level !== hls!.currentLevel) return;
-          topFrags += 1;
-          const buffered =
-            video.buffered.length > 0
-              ? video.buffered.end(video.buffered.length - 1) - video.currentTime
-              : 0;
-          if (topFrags >= 2 && buffered >= 3) reveal();
-        });
-      });
-    }
+      } else if (video.canPlayType("application/vnd.apple.mpegurl")) {
+        // iOS Safari native HLS — best effort with the plateau gate above.
+        video.src = src;
+        video.play().catch(() => {});
+      }
+    });
 
     return () => {
-      if (onTimeUpdate) video.removeEventListener("timeupdate", onTimeUpdate);
       clearTimeout(fallback);
+      clearInterval(poll);
+      video.removeEventListener("resize", check);
+      video.removeEventListener("timeupdate", check);
+      video.removeEventListener("progress", check);
       hls?.destroy();
     };
   }, [muxId]);
@@ -102,6 +110,10 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
           minHeight: "100%",
           transform: "translate(-50%, -50%)",
           objectFit: "cover",
+          // Stay hidden until the video is confirmed at full quality, so the
+          // pixelated first frames of the HLS ramp are never shown.
+          opacity: ready ? 1 : 0,
+          transition: "opacity 0.7s ease",
         }}
       />
 
