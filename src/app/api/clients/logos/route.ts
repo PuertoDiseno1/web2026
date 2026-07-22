@@ -33,12 +33,26 @@ export async function DELETE(req: Request) {
     return NextResponse.json({ error: "url requerida" }, { status: 400 });
   }
 
-  const key = url.replace(`${R2_PUBLIC_URL}/`, "");
+  // Extract the object key robustly, even if R2_PUBLIC_URL differs from the
+  // host embedded in the stored URL (custom domain vs pub-*.r2.dev).
+  let key = url.replace(`${R2_PUBLIC_URL}/`, "");
+  if (key === url) {
+    const idx = url.indexOf("clientes/");
+    if (idx !== -1) key = url.slice(idx);
+  }
   if (!key.startsWith("clientes/")) {
     return NextResponse.json({ error: "Ruta inválida" }, { status: 400 });
   }
 
-  await r2.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key }));
+  try {
+    await r2.send(new DeleteObjectCommand({ Bucket: BUCKET, Key: key }));
+  } catch (err) {
+    console.error("R2 delete failed:", err);
+    return NextResponse.json(
+      { error: `No se pudo eliminar: ${(err as Error).name ?? "error"}` },
+      { status: 502 }
+    );
+  }
   return NextResponse.json({ ok: true });
 }
 
@@ -58,7 +72,15 @@ export async function POST(req: Request) {
   const safeName = `${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`;
   const key = `clientes/${safeName}`;
   const bytes = await file.arrayBuffer();
-  const url = await uploadToR2(Buffer.from(bytes), key, CONTENT_TYPES[ext] ?? "image/png");
 
-  return NextResponse.json({ url });
+  try {
+    const url = await uploadToR2(Buffer.from(bytes), key, CONTENT_TYPES[ext] ?? "image/png");
+    return NextResponse.json({ url });
+  } catch (err) {
+    console.error("R2 upload failed:", err);
+    return NextResponse.json(
+      { error: `No se pudo subir: ${(err as Error).name ?? "error"}` },
+      { status: 502 }
+    );
+  }
 }

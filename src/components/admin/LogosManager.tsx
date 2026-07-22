@@ -20,6 +20,9 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
       if (res.ok) {
         const { url } = await res.json();
         setLogos((prev) => [...prev, url]);
+      } else {
+        const { error } = await res.json().catch(() => ({ error: `Error ${res.status}` }));
+        alert(`No se pudo subir "${file.name}": ${error ?? res.status}`);
       }
     }
     setUploading(false);
@@ -30,12 +33,17 @@ export default function LogosManager({ initialLogos }: { initialLogos: string[] 
     const name = url.split("/").pop() ?? url;
     if (!confirm(`¿Eliminar ${name}?`)) return;
     setDeleting(url);
-    await fetch("/api/clients/logos", {
+    const res = await fetch("/api/clients/logos", {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ url }),
     });
-    setLogos((prev) => prev.filter((f) => f !== url));
+    if (res.ok) {
+      setLogos((prev) => prev.filter((f) => f !== url));
+    } else {
+      const { error } = await res.json().catch(() => ({ error: `Error ${res.status}` }));
+      alert(`No se pudo eliminar: ${error ?? res.status}`);
+    }
     setDeleting(null);
   }
 

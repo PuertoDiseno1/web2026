@@ -1,44 +1,19 @@
 export const dynamic = 'force-dynamic';
 import Link from "next/link";
 import Image from "next/image";
-import { S3Client, ListObjectsV2Command } from "@aws-sdk/client-s3";
 import { prisma } from "@/lib/prisma";
+import { listClientLogos } from "@/lib/r2";
 import ClientsCarousel from "@/components/site/ClientsCarousel";
 import HeroVideo from "@/components/site/HeroVideo";
 import ProjectsRotator from "@/components/site/ProjectsRotator";
 import StatsCounter from "@/components/site/StatsCounter";
-
-const R2_PUBLIC_URL = process.env.R2_PUBLIC_URL ?? "https://pub-2e6a857a712c4a7bbf3c196da351c63c.r2.dev";
-
-async function getLogosFromR2(): Promise<string[]> {
-  try {
-    const client = new S3Client({
-      region: "auto",
-      endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
-      credentials: {
-        accessKeyId: process.env.R2_ACCESS_KEY_ID!,
-        secretAccessKey: process.env.R2_SECRET_ACCESS_KEY!,
-      },
-    });
-    const res = await client.send(new ListObjectsV2Command({
-      Bucket: process.env.R2_BUCKET ?? "puerto1",
-      Prefix: "clientes/",
-    }));
-    return (res.Contents ?? [])
-      .map((o) => o.Key!)
-      .filter((k) => /\.(png|jpg|jpeg|svg|webp)$/i.test(k))
-      .map((k) => `${R2_PUBLIC_URL}/${k}`);
-  } catch {
-    return [];
-  }
-}
 
 async function getData() {
   try {
     const [projects, settings, logos] = await Promise.all([
       prisma.project.findMany({ where: { published: true }, orderBy: { order: "asc" } }),
       prisma.siteSettings.findMany(),
-      getLogosFromR2(),
+      listClientLogos(),
     ]);
     const s = Object.fromEntries(settings.map((r) => [r.key, r.value]));
     const featured = projects.find((p) => p.featured) ?? projects[0] ?? null;
