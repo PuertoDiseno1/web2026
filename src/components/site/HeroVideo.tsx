@@ -45,11 +45,11 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
       import("hls.js").then(({ default: Hls }) => {
         if (!Hls.isSupported()) return;
         hls = new Hls({
-          startLevel: 999, // start at the highest level the player size allows
+          startLevel: 999, // clamps to highest available level
           autoStartLoad: true,
-          // Cap quality to the actual rendered size: a hero this size looks
-          // identical at 1080p as at 4K, but 4K loads far slower and can stall.
-          capLevelToPlayerSize: true,
+          // Do NOT cap to player size: the cover-sized element reports a
+          // misleading box and makes hls.js pick a low, blurry rendition.
+          capLevelToPlayerSize: false,
           maxBufferLength: 60,
           abrEwmaDefaultEstimate: 10_000_000, // assume 10 Mbps so ABR starts high
         });
@@ -57,10 +57,9 @@ function VideoLayer({ muxId, className }: { muxId: string; className?: string })
         hls.loadSource(src);
         hls.attachMedia(video);
         hls.on(Hls.Events.MANIFEST_PARSED, (_e, data) => {
-          // Lock to the sharpest level allowed for this screen (no ABR dips,
-          // so text never degrades mid-playback), but not wastefully above it.
-          const capped = hls!.maxAutoLevel;
-          hls!.currentLevel = capped >= 0 ? capped : data.levels.length - 1;
+          // Lock to the highest rendition (no ABR dips, so text stays sharp).
+          // The poster hides the initial load so the ramp is never visible.
+          hls!.currentLevel = data.levels.length - 1;
           video.play().catch(() => {});
         });
         // Reveal only once two full-quality fragments at the top level have
