@@ -14,45 +14,60 @@ export default async function Footer() {
     <footer id="site-footer" style={{ background: "#00285f", padding: "3.5rem 2.5rem 2rem" }}>
       <div style={{ maxWidth: 1200, margin: "0 auto" }}>
 
-        {/* Top row */}
-        <div className="footer-grid" style={{ display: "grid", gridTemplateColumns: "1fr auto", gap: "4rem", alignItems: "start", marginBottom: "3rem" }}>
+        <div className="footer-main" style={{ display: "flex", justifyContent: "space-between", alignItems: "stretch", gap: "4rem" }}>
 
-          {/* Logo */}
-          <div>
-            <Image
-              src="/logo-footer1.png"
-              alt="Puerto Diseño"
-              width={180}
-              height={87}
-              style={{ width: "auto", height: "auto", maxWidth: 180 }}
-            />
+          {/* Left: brand + divider + socios */}
+          <div className="footer-brand" style={{ display: "flex", alignItems: "stretch", gap: "2.5rem" }}>
+
+            {/* Logo (top) + address (bottom) */}
+            <div style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", gap: "3rem" }}>
+              <Image
+                src="/logo-footer1.png"
+                alt="Puerto Diseño"
+                width={180}
+                height={87}
+                style={{ width: "auto", height: "auto", maxWidth: 180 }}
+              />
+              <div className="footer-address" style={{ fontSize: "clamp(0.85rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
+                <span style={{ display: "block" }}>+562 2570 1400</span>
+                {(s.address ?? "Av. del Valle Nte. 945,\nHuechuraba. Santiago, Chile").split("\n").map((line, i) => (
+                  <span key={i} style={{ display: "block" }}>{line}</span>
+                ))}
+              </div>
+            </div>
+
+            {/* Vertical divider */}
+            <div className="footer-divider" style={{ width: 1, alignSelf: "stretch", background: "rgba(255,255,255,0.35)" }} />
+
+            {/* Socios */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.85rem" }}>
+              <span style={{ fontSize: "clamp(1.5rem, 2.1vw, 2.5rem)", fontWeight: 300, color: "rgba(255,255,255,0.85)" }}>
+                Socios
+              </span>
+              <Image
+                src="/logo-chilediseno.png"
+                alt="Chile Diseño"
+                width={140}
+                height={171}
+                style={{ width: "auto", height: "auto", maxWidth: 140 }}
+              />
+            </div>
           </div>
 
-          {/* Nav links */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-            {[["Nosotros", "/nosotros"], ["Servicios", "/servicios"], ["Proyectos", "/proyectos"]].map(([label, href]) => (
-              <Link key={href} href={href} style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.625rem)", fontWeight: 300, color: "rgba(255,255,255,0.85)", lineHeight: 1.8 }}>
-                {label}
-              </Link>
-            ))}
-          </div>
+          {/* Right: nav (top) + social (bottom) */}
+          <div className="footer-side" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between", alignItems: "flex-end", gap: "2rem" }}>
 
+            {/* Nav links */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.5rem" }}>
+              {[["Nosotros", "/nosotros"], ["Servicios", "/servicios"], ["Proyectos", "/proyectos"]].map(([label, href]) => (
+                <Link key={href} href={href} style={{ fontSize: "clamp(0.95rem, 1.2vw, 1.625rem)", fontWeight: 300, color: "rgba(255,255,255,0.85)", lineHeight: 1.8 }}>
+                  {label}
+                </Link>
+              ))}
+            </div>
 
-        </div>
-
-        {/* Bottom row */}
-        <div className="footer-bottom" style={{ paddingTop: "1.5rem", display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem" }}>
-
-          {/* Address */}
-          <div className="footer-address" style={{ fontSize: "clamp(0.85rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.55)", lineHeight: 1.6 }}>
-            <span style={{ display: "block" }}>+562 2570 1400</span>
-            {(s.address ?? "Av. del Valle Nte. 945,\nHuechuraba. Santiago, Chile").split("\n").map((line, i) => (
-              <span key={i} style={{ display: "block" }}>{line}</span>
-            ))}
-          </div>
-
-          {/* Social icons + copyright */}
-          <div className="footer-social" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
+            {/* Social icons + copyright */}
+            <div className="footer-social" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "0.75rem" }}>
             <div style={{ display: "flex", gap: "0.75rem" }}>
               {s.instagram && (
                 <a href={s.instagram} target="_blank" rel="noopener noreferrer" style={{ color: "rgba(255,255,255,0.6)" }}>
@@ -80,6 +95,7 @@ export default async function Footer() {
             <p style={{ fontSize: "clamp(0.7rem, 0.9vw, 1.1875rem)", fontWeight: 300, color: "rgba(255,255,255,0.3)" }}>
               © Todos los derechos reservados
             </p>
+          </div>
           </div>
         </div>
 
